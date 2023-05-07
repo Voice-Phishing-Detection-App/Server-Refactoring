@@ -3,7 +3,7 @@ package PhishingUniv.Voice.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "voice_entity")
+@Table(name = "voice")
 public class VoiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
