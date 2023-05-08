@@ -1,4 +1,4 @@
-package PhishingUniv.Report.entity;
+package PhishingUniv.Phinocchio.Report.entity;
 
 import javax.persistence.*;
 

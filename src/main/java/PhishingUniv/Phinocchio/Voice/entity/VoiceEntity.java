@@ -1,4 +1,4 @@
-package PhishingUniv.Voice.entity;
+package PhishingUniv.Phinocchio.Voice.entity;
 
 import javax.persistence.*;
 
