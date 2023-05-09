@@ -17,7 +17,7 @@ public class SosEntity {
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phone_number;
 
-    @Column(name = "relation", nullable = false)
+    @Column(name = "relation", nullable = false, length = 50)
     private String relation;
 
     @Column(name = "level", nullable = false)

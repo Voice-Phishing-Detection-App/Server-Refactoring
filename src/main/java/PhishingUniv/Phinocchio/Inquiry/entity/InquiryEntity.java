@@ -10,6 +10,12 @@ public class InquiryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inquiry_id;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false, length = 50)
     private String type;
+
+    @Column(name = "content", nullable = false)
+    private String content;
+
+    @Column(name = "processed", nullable = false)
+    private boolean processed;
 }
