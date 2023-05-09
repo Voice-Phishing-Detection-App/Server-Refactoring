@@ -10,6 +10,6 @@ public class VoiceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long voice_id;
 
-    @Column(name = "link", nullable = false)
+    @Column(name = "link", nullable = false, length = 100)
     private String link;
 }

@@ -10,6 +10,6 @@ public class InquiryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inquiry_id;
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false, length = 50)
     private String type;
 }
