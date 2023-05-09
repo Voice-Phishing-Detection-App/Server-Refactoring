@@ -12,4 +12,7 @@ public class InquiryEntity {
 
     @Column(name = "type", nullable = false, length = 50)
     private String type;
+
+    @Column(name = "content", nullable = false)
+    private String content;
 }
