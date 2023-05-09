@@ -7,18 +7,19 @@ import javax.persistence.*;
 public class DoubtEntity {
 
     @Id
+    @Column(name = "doubt_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doubt_id;
 
-    @Column(length = 20)
+    @Column(name = "phone_number", nullable = false, length = 20)
     private String phone_number;
 
-    @Column
+    @Column(name = "user_id", nullable = false)
     private Long user_id;
 
-    @Column
+    @Column(name = "voice_id", nullable = false)
     private Long voice_id;
 
-    @Column
+    @Column(name = "report_id", nullable = false)
     private Long report_id;
 }
