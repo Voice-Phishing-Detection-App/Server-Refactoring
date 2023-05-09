@@ -6,9 +6,10 @@ import javax.persistence.*;
 @Table(name = "inquiry")
 public class InquiryEntity {
     @Id
+    @Column(name = "inquiry_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long inquiry_id;
 
-    @Column(nullable = false)
+    @Column(name = "type", nullable = false)
     private String type;
 }

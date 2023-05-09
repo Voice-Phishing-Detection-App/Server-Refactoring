@@ -7,19 +7,20 @@ import javax.persistence.*;
 public class SosEntity {
 
     @Id
+    @Column(name = "sos_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sos_id;
 
-    @Column(nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long user_id;
 
-    @Column(nullable = false, length=20)
+    @Column(name = "phone_number", nullable = false, length = 20)
     private String phone_number;
 
-    @Column(nullable = false)
+    @Column(name = "relation", nullable = false)
     private String relation;
 
-    @Column(nullable = false)
+    @Column(name = "level", nullable = false)
     private int level;
 
 }

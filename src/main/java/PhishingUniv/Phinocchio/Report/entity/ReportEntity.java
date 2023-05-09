@@ -6,21 +6,22 @@ import javax.persistence.*;
 @Table(name = "report")
 public class ReportEntity {
     @Id
+    @Column(name = "report_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long report_id;
 
-    @Column(nullable = false)
+    @Column(name = "reason", nullable = false)
     private String reason;
 
-    @Column(nullable = false)
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(nullable = false, length = 20)
+    @Column(name = "phone_number", nullable = false, length = 20)
     private String phone_number;
 
-    @Column
+    @Column(name = "user_id", nullable = false)
     private Long user_id;
 
-    @Column
+    @Column(name = "voice_id", nullable = false)
     private Long voice_id;
 }

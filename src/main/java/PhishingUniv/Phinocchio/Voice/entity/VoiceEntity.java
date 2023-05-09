@@ -6,9 +6,10 @@ import javax.persistence.*;
 @Table(name = "voice")
 public class VoiceEntity {
     @Id
+    @Column(name = "voice_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long voice_id;
 
-    @Column
+    @Column(name = "link", nullable = false)
     private String link;
 }
