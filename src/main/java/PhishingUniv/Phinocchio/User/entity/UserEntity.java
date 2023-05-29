@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 
-public class UserEntity {
+public class UserEntity extends Timestamp{
 
     @Id
     @GeneratedValue
@@ -36,7 +36,7 @@ public class UserEntity {
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phone_number;
 
-    @Column(name = "registration_date", nullable = false)
+    /*@Column(name = "registration_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date registration_date;
 
@@ -44,7 +44,7 @@ public class UserEntity {
     @Column(name = "agree_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date agree_date;
-
+*/
 
     public UserEntity()
     {}

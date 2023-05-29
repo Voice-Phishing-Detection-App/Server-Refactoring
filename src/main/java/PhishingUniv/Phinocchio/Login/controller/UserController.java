@@ -2,29 +2,35 @@ package PhishingUniv.Phinocchio.Login.controller;
 
 import PhishingUniv.Phinocchio.Login.dto.LoginDto;
 import PhishingUniv.Phinocchio.Login.dto.SignupRequestDto;
+import PhishingUniv.Phinocchio.Login.dto.TokenDto;
 import PhishingUniv.Phinocchio.User.entity.UserEntity;
 import PhishingUniv.Phinocchio.Login.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService)
-    {
-        this.userService = userService;
-    }
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
 
     @PostMapping("/login")
-    public UserEntity login(@RequestBody LoginDto loginDto) {
-
-          return userService.Login(loginDto);
+    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
+        String token= userService.login(loginDto);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Bearer " + token);
+        return ResponseEntity.ok().headers(httpHeaders).body(new TokenDto(token));
+          //return ResponseEntity.ok(new TokenDto());
     }
 
     @PostMapping("/signup")
