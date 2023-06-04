@@ -8,7 +8,7 @@ public class CenterEntity {
     @Id
     @Column(name = "center_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long center_id;
+    private Long centerId;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -17,6 +17,6 @@ public class CenterEntity {
     private String content;
 
     @Column(name = "phone)number", nullable = false, length = 20)
-    private String phone_number;
+    private String phoneNumber;
 
 }

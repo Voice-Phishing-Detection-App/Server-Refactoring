@@ -8,7 +8,7 @@ public class ReportEntity {
     @Id
     @Column(name = "report_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long report_id;
+    private Long reportId;
 
     @Column(name = "reason", nullable = false, length = 50)
     private String reason;
@@ -17,11 +17,11 @@ public class ReportEntity {
     private String content;
 
     @Column(name = "phone_number", nullable = false, length = 20)
-    private String phone_number;
+    private String phoneNumber;
 
     @Column(name = "user_id", nullable = false)
-    private Long user_id;
+    private Long userId;
 
     @Column(name = "voice_id", nullable = false)
-    private Long voice_id;
+    private Long voiceId;
 }

@@ -8,7 +8,7 @@ public class InquiryEntity {
     @Id
     @Column(name = "inquiry_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long inquiry_id;
+    private Long inquiryId;
 
     @Column(name = "type", nullable = false, length = 50)
     private String type;
