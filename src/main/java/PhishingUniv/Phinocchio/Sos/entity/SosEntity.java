@@ -9,13 +9,13 @@ public class SosEntity {
     @Id
     @Column(name = "sos_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sos_id;
+    private Long sosId;
 
     @Column(name = "user_id", nullable = false)
-    private Long user_id;
+    private Long userId;
 
     @Column(name = "phone_number", nullable = false, length = 20)
-    private String phone_number;
+    private String phoneNumber;
 
     @Column(name = "relation", nullable = false, length = 50)
     private String relation;

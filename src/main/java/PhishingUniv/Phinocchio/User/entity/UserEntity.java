@@ -19,9 +19,9 @@ import java.util.Date;
 public class UserEntity extends Timestamp{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long user_id;
+    private Long userId;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -34,7 +34,7 @@ public class UserEntity extends Timestamp{
     private String password;
 
     @Column(name = "phone_number", nullable = false, length = 20)
-    private String phone_number;
+    private String phoneNumber;
 
     /*@Column(name = "registration_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -53,6 +53,6 @@ public class UserEntity extends Timestamp{
         this.id = signupRequestDto.getId();
         this.name=signupRequestDto.getName();
         this.password = signupRequestDto.getPassword();
-        this.phone_number= signupRequestDto.getPhone_number();
+        this.phoneNumber= signupRequestDto.getPhoneNumber();
     }
 }

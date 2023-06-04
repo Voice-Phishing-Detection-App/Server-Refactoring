@@ -1,15 +1,21 @@
 package PhishingUniv.Phinocchio.Voice.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "voice")
+@Getter
+@Setter
 public class VoiceEntity {
     @Id
     @Column(name = "voice_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long voice_id;
+    private Long voiceId;
 
-    @Column(name = "link", nullable = false, length = 100)
-    private String link;
+    @Lob
+    @Column(name = "text", nullable = false)
+    private String text;
 }
