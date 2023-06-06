@@ -16,7 +16,7 @@ public class CenterEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "phone)number", nullable = false, length = 20)
+    @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
 }
