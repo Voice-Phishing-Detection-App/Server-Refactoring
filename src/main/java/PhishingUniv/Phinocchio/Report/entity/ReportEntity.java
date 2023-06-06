@@ -10,8 +10,8 @@ public class ReportEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
 
-    @Column(name = "reason", nullable = false, length = 50)
-    private String reason;
+    @Column(name = "type", nullable = false, length = 50)
+    private String type;
 
     @Column(name = "content", nullable = false)
     private String content;
