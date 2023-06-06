@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
@@ -13,5 +14,6 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class) // 생성/변경 시간을 자동으로 업데이트합니다.
 public class Timestamp {
     @CreatedDate
-    private LocalDateTime registration_date;
+    @Column(name = "registration_date")
+    private LocalDateTime registrationDate;
 }
