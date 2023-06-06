@@ -1,6 +1,7 @@
 package PhishingUniv.Phinocchio.exception;
 
 
+import PhishingUniv.Phinocchio.exception.Login.AppException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

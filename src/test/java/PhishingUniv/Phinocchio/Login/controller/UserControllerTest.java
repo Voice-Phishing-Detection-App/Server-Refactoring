@@ -2,8 +2,8 @@ package PhishingUniv.Phinocchio.Login.controller;
 
 import PhishingUniv.Phinocchio.domain.Login.dto.LoginDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
-import PhishingUniv.Phinocchio.exception.AppException;
-import PhishingUniv.Phinocchio.exception.ErrorCode;
+import PhishingUniv.Phinocchio.exception.Login.AppException;
+import PhishingUniv.Phinocchio.exception.Login.ErrorCode;
 import PhishingUniv.Phinocchio.domain.Login.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;

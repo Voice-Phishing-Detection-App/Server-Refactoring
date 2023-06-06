@@ -1,4 +1,4 @@
-package PhishingUniv.Phinocchio.exception;
+package PhishingUniv.Phinocchio.exception.Login;
 
 
 import lombok.AllArgsConstructor;

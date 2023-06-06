@@ -1,7 +1,7 @@
 package PhishingUniv.Phinocchio.domain.Login.security;
 
-import PhishingUniv.Phinocchio.exception.AppException;
-import PhishingUniv.Phinocchio.exception.ErrorCode;
+import PhishingUniv.Phinocchio.exception.Login.AppException;
+import PhishingUniv.Phinocchio.exception.Login.ErrorCode;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
 import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
