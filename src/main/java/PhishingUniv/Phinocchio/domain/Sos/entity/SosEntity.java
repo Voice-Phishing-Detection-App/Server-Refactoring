@@ -1,9 +1,14 @@
 package PhishingUniv.Phinocchio.domain.Sos.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "sos")
+@Getter
+@Setter
 public class SosEntity {
 
     @Id
