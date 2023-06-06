@@ -1,12 +1,11 @@
 package PhishingUniv.Phinocchio.Login.controller;
 
-import PhishingUniv.Phinocchio.Login.dto.LoginDto;
-import PhishingUniv.Phinocchio.Login.dto.SignupRequestDto;
-import PhishingUniv.Phinocchio.Login.exception.AppException;
-import PhishingUniv.Phinocchio.Login.exception.ErrorCode;
-import PhishingUniv.Phinocchio.Login.service.UserService;
+import PhishingUniv.Phinocchio.domain.Login.dto.LoginDto;
+import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
+import PhishingUniv.Phinocchio.exception.Login.AppException;
+import PhishingUniv.Phinocchio.exception.Login.ErrorCode;
+import PhishingUniv.Phinocchio.domain.Login.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
