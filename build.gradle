@@ -40,7 +40,7 @@ dependencies {
 
 
 
-	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.2'
+	implementation 'org.modelmapper:modelmapper:2.4.2'
 
 }
 
