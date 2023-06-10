@@ -3,7 +3,9 @@ package PhishingUniv.Phinocchio.domain.Login.controller;
 import PhishingUniv.Phinocchio.domain.Login.dto.LoginDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.TokenDto;
+import PhishingUniv.Phinocchio.domain.Login.security.UserDetailsImpl;
 import PhishingUniv.Phinocchio.domain.Login.service.UserService;
+import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Security;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,15 +52,25 @@ public class UserController {
         return "Hello";
     }
 
+    /*
     @GetMapping("/securityTest")
     public String securityTest()
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        UserDetailsImpl userDetails ;
 
         // 사용자 식별
-        return authentication.getName();
+        if (principal instanceof UserDetailsImpl) {
+            userDetails = (UserDetailsImpl) principal;
+            return userDetails.getUserId();
+        } else {
+            // principal이 UserDetailsImpl 타입이 아닌 경우에 대한 처리
+            throw new InvalidJwtException("Unexpected principal type: " + principal.getClass().getName());
+        }
 
-    }
+
+    }*/
 
 
 }

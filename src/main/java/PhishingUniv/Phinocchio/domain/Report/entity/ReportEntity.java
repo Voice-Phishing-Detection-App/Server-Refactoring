@@ -1,17 +1,25 @@
 package PhishingUniv.Phinocchio.domain.Report.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "report")
+@Getter
+@Builder
+@AllArgsConstructor
 public class ReportEntity extends Timestamp {
     @Id
     @Column(name = "report_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 50)
-    private String type;
+    private ReportType type;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -24,4 +32,13 @@ public class ReportEntity extends Timestamp {
 
     @Column(name = "voice_id", nullable = false)
     private Long voiceId;
+
+    public ReportEntity(ReportType reportType, String content, String phoneNumber, Long userId, Long voiceId)
+    {
+        this.type = reportType;
+        this.content = content;
+        this.phoneNumber = phoneNumber;
+        this.userId = userId;
+        this.voiceId = voiceId;
+    }
 }

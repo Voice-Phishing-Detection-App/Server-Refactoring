@@ -2,6 +2,7 @@ package PhishingUniv.Phinocchio.exception;
 
 
 import PhishingUniv.Phinocchio.exception.Login.AppException;
+import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,8 +27,8 @@ public class ExceptionManager {
 
 
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> runtimeExceptionHandler(RuntimeException e)
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity<?> runtimeExceptionHandler(InvalidJwtException e)
     {
 
         //HttpStatus enum 형식의 열거형 상수 클래스

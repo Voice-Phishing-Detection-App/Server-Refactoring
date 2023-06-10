@@ -1,10 +1,12 @@
 package PhishingUniv.Phinocchio.domain.Login.security;
 
 
+import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -16,11 +18,23 @@ public class JwtGenerator {
 
     public String generateToken(Authentication authentication){
         String id = authentication.getName();
+/*
+
+        UserDetailsImpl userDetails = null;
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetailsImpl) {
+            userDetails = (UserDetailsImpl) principal;
+            // userDetails 객체를 사용하여 추가 작업 수행
+        } else {
+            throw new InvalidJwtException("Invalid JWT");
+        }
+*/
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_EXPIRATION);
 
         //토큰 생성하여 반환
         return Jwts.builder()
+                //.claim("userId", userDetails.getUserId())
                 .setSubject(id)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
@@ -29,15 +43,22 @@ public class JwtGenerator {
 
 
     }
-
     public String getIdFromJWT(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(SecurityConstants.JWT_KEY)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-            return claims.getSubject();
+        return claims.getSubject();
     }
+    /*public String getUserIdFromJWT(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(SecurityConstants.JWT_KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+            return claims.get("userId",String.class);
+    }*/
 
     public boolean validateToken(String token) {
         try {
