@@ -19,7 +19,6 @@ public class UserDetailsImpl implements UserDetails {
         return Collections.emptyList();
     }
 
-
     @Override
     public String getPassword() {
         return user.getPassword();
@@ -27,6 +26,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
+        //여기서 말하는 Username이 로그인 시 사용되는 Id임
         return user.getId();
     }
 

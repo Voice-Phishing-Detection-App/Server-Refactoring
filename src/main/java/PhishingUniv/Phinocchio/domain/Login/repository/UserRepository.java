@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
 
+
+    //Id : 로그인 시 사용하는 거
     Optional<UserEntity> findById(String id);
     Optional<UserEntity> findByName(String name);
 
