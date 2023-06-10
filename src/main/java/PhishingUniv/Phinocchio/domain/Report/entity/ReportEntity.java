@@ -3,6 +3,7 @@ package PhishingUniv.Phinocchio.domain.Report.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor //이게 있어야 findReportEntitiesById가 작동함
 public class ReportEntity extends Timestamp {
     @Id
     @Column(name = "report_id")
