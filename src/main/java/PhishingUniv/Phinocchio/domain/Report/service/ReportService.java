@@ -13,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ReportService {
@@ -25,7 +28,7 @@ public class ReportService {
     {
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity =userRepository.findById(ID).orElseThrow(
-                ()->new IllegalStateException("addReport, User를 찾을 수 없음"));
+                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
 
         Long userId = userEntity.getUserId();
 
@@ -34,6 +37,20 @@ public class ReportService {
 
         reportRepository.save(reportEntity);
         return reportEntity;
+    }
+
+    public List<ReportEntity> getReports()
+    {
+        String ID = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity =userRepository.findById(ID).orElseThrow(
+                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+
+        Long userId = userEntity.getUserId();
+        List<ReportEntity> reportEntities = reportRepository.findReportEntitiesByUserId(userId);
+
+        return reportEntities;
+
+
     }
 
 }
