@@ -43,4 +43,9 @@ public class ReportController {
 
         return ResponseEntity.ok(searchResponseDto);
     }
+
+    @GetMapping("/search/{phoneNumber}")
+    public List<ReportEntity> getReportsByPhoneNumber(@PathVariable String phoneNumber){
+        return searchService.getReportsByPhoneNumber(phoneNumber);
+    }
 }

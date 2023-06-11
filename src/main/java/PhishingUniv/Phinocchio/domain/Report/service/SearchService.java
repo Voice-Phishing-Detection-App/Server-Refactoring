@@ -32,4 +32,8 @@ public class SearchService {
 
         return searchResponseDto;
     }
+
+    public List<ReportEntity> getReportsByPhoneNumber(String phoneNumber){
+        return reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
+    }
 }
