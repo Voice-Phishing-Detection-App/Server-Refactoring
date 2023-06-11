@@ -1,8 +1,11 @@
 package PhishingUniv.Phinocchio.domain.Report.controller;
 
 import PhishingUniv.Phinocchio.domain.Report.dto.ReportDto;
+import PhishingUniv.Phinocchio.domain.Report.dto.SearchRequestDto;
+import PhishingUniv.Phinocchio.domain.Report.dto.SearchResponseDto;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.Report.service.ReportService;
+import PhishingUniv.Phinocchio.domain.Report.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReportController {
     private final ReportService reportService;
-    //private final SearchService searchService;
+    private final SearchService searchService;
 
     @PostMapping("/add")
     public ResponseEntity<ReportEntity> addReport(@RequestBody ReportDto reportDto)
@@ -34,4 +37,15 @@ public class ReportController {
 
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<SearchResponseDto> getNumberSearch(@RequestBody SearchRequestDto searchRequestDto){
+        SearchResponseDto searchResponseDto = searchService.getNumberSearch(searchRequestDto.getPhoneNumber());
+
+        return ResponseEntity.ok(searchResponseDto);
+    }
+
+    @PostMapping("/searchList")
+    public List<ReportEntity> getReportsByPhoneNumber(@RequestBody SearchRequestDto searchRequestDto){
+        return searchService.getReportsByPhoneNumber(searchRequestDto.getPhoneNumber());
+    }
 }
