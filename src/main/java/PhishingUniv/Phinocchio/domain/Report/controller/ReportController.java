@@ -44,8 +44,8 @@ public class ReportController {
         return ResponseEntity.ok(searchResponseDto);
     }
 
-    @GetMapping("/search/{phoneNumber}")
-    public List<ReportEntity> getReportsByPhoneNumber(@PathVariable String phoneNumber){
-        return searchService.getReportsByPhoneNumber(phoneNumber);
+    @PostMapping("/searchList")
+    public List<ReportEntity> getReportsByPhoneNumber(@RequestBody SearchRequestDto searchRequestDto){
+        return searchService.getReportsByPhoneNumber(searchRequestDto.getPhoneNumber());
     }
 }
