@@ -9,8 +9,6 @@ import lombok.Setter;
 @Builder
 public class SosDto {
 
-    private Long userId;
-
     private String phoneNumber;
 
     private String relation;
