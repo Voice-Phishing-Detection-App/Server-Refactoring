@@ -6,10 +6,7 @@ import PhishingUniv.Phinocchio.domain.Sos.dto.SosUpdateDto;
 import PhishingUniv.Phinocchio.domain.Sos.service.SosService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sos")
@@ -17,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class SosController {
 
     private final SosService sosService;
+
+    @GetMapping("/list")
+    public ResponseEntity list() {
+        return sosService.sosList();
+    }
 
     @PostMapping("/add")
     public ResponseEntity add(@RequestBody SosDto sosDto) {
