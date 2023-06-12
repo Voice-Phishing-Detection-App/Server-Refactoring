@@ -2,8 +2,8 @@ package PhishingUniv.Phinocchio.Login.controller;
 
 import PhishingUniv.Phinocchio.domain.Login.dto.LoginDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
-import PhishingUniv.Phinocchio.exception.Login.AppException;
-import PhishingUniv.Phinocchio.exception.Login.ErrorCode;
+import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
+import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.domain.Login.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -96,7 +96,7 @@ class UserControllerTest {
     void login_fail_username() throws Exception {
 
         when(userService.login(any()))
-                .thenThrow(new AppException(ErrorCode.USERNAME_NOT_FOUND, ""));
+                .thenThrow(new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, ""));
 
 
 
@@ -120,7 +120,7 @@ class UserControllerTest {
     @WithAnonymousUser
     void login_fail_password() throws Exception {
         when(userService.login(any()))
-                .thenThrow(new AppException(ErrorCode.INVALID_PASSWORD, ""));
+                .thenThrow(new LoginAppException(LoginErrorCode.INVALID_PASSWORD, ""));
 
 
         LoginDto loginDto = new LoginDto();

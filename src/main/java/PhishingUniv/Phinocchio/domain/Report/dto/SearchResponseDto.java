@@ -1,5 +1,6 @@
 package PhishingUniv.Phinocchio.domain.Report.dto;
 
+import PhishingUniv.Phinocchio.domain.Report.entity.ReportType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +12,11 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchDto {
+public class SearchResponseDto {
+
     private String phoneNumber;
 
-    private List<String> type;
+    private Long reportCount;
 
-    private List<String> content;
+    private List<ReportType> type;
 }

@@ -1,7 +1,7 @@
 package PhishingUniv.Phinocchio.exception;
 
 
-import PhishingUniv.Phinocchio.exception.Login.AppException;
+import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ public class ExceptionManager {
 
     //AppException이 발생하면 아래 메서드가 호출되어 예외를 처리함
 
-    @ExceptionHandler(AppException.class)
-    public ResponseEntity<?> appExceptionHandler(AppException e)
+    @ExceptionHandler(LoginAppException.class)
+    public ResponseEntity<?> appExceptionHandler(LoginAppException e)
     {
 
         //예외 처리 결과를 ResponseEntity를 이용하여 Http로 반환함

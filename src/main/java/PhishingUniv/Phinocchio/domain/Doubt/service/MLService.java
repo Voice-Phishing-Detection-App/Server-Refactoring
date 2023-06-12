@@ -18,19 +18,20 @@ public class MLService {
 
     public static MLResponseDto processText(MLRequestDto mlRequestDto) {
 //        // 머신러닝 서버로 데이터 전송 후 데이터 받음
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<MLRequestDto> requestEntity = new HttpEntity<>(mlRequestDto, headers);
-        ResponseEntity<MLResponseDto> responseEntity = restTemplate.exchange(MLServerUrl, HttpMethod.POST, requestEntity, MLResponseDto.class);
-
-        System.out.println(responseEntity.getBody());
-
-        return responseEntity.getBody();
-
-//        MLResponseDto mlResponseDto = new MLResponseDto();
-//        mlResponseDto.setLevel(3);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
 //
-//        return mlResponseDto;
+//        HttpEntity<MLRequestDto> requestEntity = new HttpEntity<>(mlRequestDto, headers);
+//        ResponseEntity<MLResponseDto> responseEntity = restTemplate.exchange(MLServerUrl, HttpMethod.POST, requestEntity, MLResponseDto.class);
+//
+//        System.out.println(responseEntity.getBody());
+//
+//        return responseEntity.getBody();
+
+        // 테스트용
+        MLResponseDto mlResponseDto = new MLResponseDto();
+        mlResponseDto.setLevel(2);
+
+        return mlResponseDto;
     }
 }
