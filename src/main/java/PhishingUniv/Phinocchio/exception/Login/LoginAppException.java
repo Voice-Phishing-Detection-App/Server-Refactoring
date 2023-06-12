@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class AppException extends RuntimeException{
-    private ErrorCode errorCode;
+public class LoginAppException extends RuntimeException{
+    private LoginErrorCode errorCode;
     private String message;
 
 
