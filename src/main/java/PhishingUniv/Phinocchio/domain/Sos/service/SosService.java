@@ -5,8 +5,8 @@ import PhishingUniv.Phinocchio.domain.Sos.dto.SosDto;
 import PhishingUniv.Phinocchio.domain.Sos.dto.SosUpdateDto;
 import PhishingUniv.Phinocchio.domain.Sos.entity.SosEntity;
 import PhishingUniv.Phinocchio.domain.Sos.repository.SosRepository;
-import PhishingUniv.Phinocchio.exception.Sos.AppException;
-import PhishingUniv.Phinocchio.exception.Sos.ErrorCode;
+import PhishingUniv.Phinocchio.exception.Sos.SosAppException;
+import PhishingUniv.Phinocchio.exception.Sos.SosErrorCode;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -40,7 +39,7 @@ public class SosService {
 
     public ResponseEntity updateSos(SosUpdateDto sosUpdateDto) {
         sosRepository.findById(sosUpdateDto.getSosId())
-                .orElseThrow(() -> new AppException(ErrorCode.SOS_NOT_FOUND, "존재하지 않는 긴급연락처입니다."));
+                .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND, "존재하지 않는 긴급연락처입니다."));
 
         SosEntity sosEntity = convertToEntity(sosUpdateDto);
         sosRepository.save(sosEntity);
@@ -51,7 +50,7 @@ public class SosService {
 
     public ResponseEntity deleteSos(SosDeleteDto sosDeleteDto) {
         SosEntity sosEntity = sosRepository.findById(sosDeleteDto.getSosId())
-                .orElseThrow(() -> new AppException(ErrorCode.SOS_NOT_FOUND, "존재하지 않는 긴급연락처입니다."));
+                .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND, "존재하지 않는 긴급연락처입니다."));
 
         sosRepository.delete(sosEntity);
 

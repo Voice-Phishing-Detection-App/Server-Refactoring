@@ -4,8 +4,8 @@ import PhishingUniv.Phinocchio.domain.Login.dto.LoginDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
 import PhishingUniv.Phinocchio.domain.Login.security.JwtGenerator;
-import PhishingUniv.Phinocchio.exception.Login.AppException;
-import PhishingUniv.Phinocchio.exception.Login.ErrorCode;
+import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
+import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class UserService {
     {
         userRepository.findById(requestDto.getId())
                 .ifPresent(m ->{
-                    throw new AppException(ErrorCode.USERNAME_DUPLICATED,"이미 존재하는 아이디입니다.");
+                    throw new LoginAppException(LoginErrorCode.USERNAME_DUPLICATED,"이미 존재하는 아이디입니다.");
                 });
 
     }
