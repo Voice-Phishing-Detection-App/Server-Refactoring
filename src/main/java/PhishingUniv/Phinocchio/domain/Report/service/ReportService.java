@@ -1,6 +1,8 @@
 package PhishingUniv.Phinocchio.domain.Report.service;
 
 
+import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
+import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
 import PhishingUniv.Phinocchio.domain.Login.security.UserDetailsImpl;
 import PhishingUniv.Phinocchio.domain.Report.dto.ReportDto;
@@ -19,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ReportService {
-
+    private final DoubtRepository doubtRepository;
     private final ReportRepository reportRepository;
 
     //userId가져오기 위해서 임시로 만들어둔 것, 캐싱으로 나중에 수정해야하는 부분
@@ -35,7 +37,15 @@ public class ReportService {
         ReportEntity reportEntity = new ReportEntity(reportDto.getType(), reportDto.getContent()
                                                 ,reportDto.getPhoneNumber(),userId,reportDto.getVoiceId());
 
-        reportRepository.save(reportEntity);
+        Long reportId = reportRepository.save(reportEntity).getReportId();
+
+        DoubtEntity doubtEntity = doubtRepository.findById(reportDto.getDoubtId()).orElseThrow(() -> new IllegalArgumentException("doubt 검색 오류"));
+        doubtEntity.setReport_id(reportId);
+        doubtRepository.save(doubtEntity);
+        //doubt에 있는 report_id update해주어야함
+        //doubtId
+
+
         return reportEntity;
     }
 

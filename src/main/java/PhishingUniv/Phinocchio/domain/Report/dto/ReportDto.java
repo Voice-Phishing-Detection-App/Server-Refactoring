@@ -16,5 +16,7 @@ public class ReportDto {
     private String phoneNumber;
 
     private Long voiceId;
+
+    private Long doubtId;
 }
 
