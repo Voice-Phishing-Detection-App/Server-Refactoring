@@ -29,6 +29,7 @@ import PhishingUniv.Phinocchio.exception.Voice.VoiceErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -81,9 +82,10 @@ public class DoubtService {
 
     }
 
-    private void sendSms(Long userId, int level) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    private void sendSms(int level) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
         // 메세지 설정
-        UserEntity userEntity = userRepository.findByUserId(userId)
+        UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, "사용자를 불러올 수 없습니다."));
         String userPhone = userEntity.getPhoneNumber();
         String smsMsg = "[피노키오] " + userPhone + " 번호로 보이스피싱이 감지되었습니다. <" + level +"단계>";
@@ -101,7 +103,7 @@ public class DoubtService {
         }
     }
 
-    public ResponseEntity<?> doubt(Long userId, DoubtRequestDto doubtRequestDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    public ResponseEntity<?> doubt(DoubtRequestDto doubtRequestDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
 
         // 머신러닝 서버로 mlRequestDto를 전송하고 응답을 받음
         MLRequestDto mlRequestDto = new MLRequestDto(doubtRequestDto.getText());
@@ -130,7 +132,7 @@ public class DoubtService {
 
         // 긴급 연락처 알람 설정 한 경우
         if(settingEntity.getSosAlram()) {
-            sendSms(userId, level);
+            sendSms(level);
         }
 
         // 보이스피싱 알람 설정 한 경우

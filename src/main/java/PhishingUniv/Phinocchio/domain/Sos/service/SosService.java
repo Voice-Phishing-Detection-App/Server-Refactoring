@@ -1,16 +1,21 @@
 package PhishingUniv.Phinocchio.domain.Sos.service;
 
+import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
 import PhishingUniv.Phinocchio.domain.Sos.dto.SosDeleteDto;
 import PhishingUniv.Phinocchio.domain.Sos.dto.SosDto;
 import PhishingUniv.Phinocchio.domain.Sos.dto.SosUpdateDto;
 import PhishingUniv.Phinocchio.domain.Sos.entity.SosEntity;
 import PhishingUniv.Phinocchio.domain.Sos.repository.SosRepository;
+import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
+import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
+import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.exception.Sos.SosAppException;
 import PhishingUniv.Phinocchio.exception.Sos.SosErrorCode;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +25,8 @@ import java.util.List;
 public class SosService {
 
     private final SosRepository sosRepository;
+
+    private final UserRepository userRepository;
 
     private final ModelMapper modelMapper;
 
@@ -33,6 +40,14 @@ public class SosService {
 
     public ResponseEntity addSos(SosDto sosDto) {
         SosEntity sosEntity = convertToEntity(sosDto);
+
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, "사용자를 찾을 수 없습니다."));
+        Long userId = userEntity.getUserId();
+
+        sosEntity.setUserId(userId);
+
         sosRepository.save(sosEntity);
         return new ResponseEntity(HttpStatus.OK);
     }
