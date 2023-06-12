@@ -16,4 +16,6 @@ public interface SosRepository extends JpaRepository<SosEntity, Long> {
 
     List<SosEntity> findByLevelGreaterThanEqual(int level);
 
+    List<SosEntity> findByUserId(Long userId);
+
 }

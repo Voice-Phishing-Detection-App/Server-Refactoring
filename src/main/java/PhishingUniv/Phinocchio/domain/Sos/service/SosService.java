@@ -38,6 +38,15 @@ public class SosService {
         return modelMapper.map(sosUpdateDto, SosEntity.class);
     }
 
+    public ResponseEntity sosList() {
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, "사용자를 찾을 수 없습니다."));
+        Long userId = userEntity.getUserId();
+
+        return ResponseEntity.ok(sosRepository.findByUserId(userId));
+    }
+
     public ResponseEntity addSos(SosDto sosDto) {
         SosEntity sosEntity = convertToEntity(sosDto);
 
@@ -57,6 +66,13 @@ public class SosService {
                 .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND, "존재하지 않는 긴급연락처입니다."));
 
         SosEntity sosEntity = convertToEntity(sosUpdateDto);
+
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, "사용자를 찾을 수 없습니다."));
+        Long userId = userEntity.getUserId();
+
+        sosEntity.setUserId(userId);
         sosRepository.save(sosEntity);
 
         return new ResponseEntity(HttpStatus.OK);
