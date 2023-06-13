@@ -1,14 +1,14 @@
-INSERT INTO "user" (name, id, password, phone_number) VALUES ('조유정', 'admin', '$2a$10$XLXsZbafQ/6hGxZ6NQ3ZvOXbN/GkCBc1oP3/wJ/gC6qAay9tfe8b2', '010-1234-5678');
-INSERT INTO "user" (name, id, password, phone_number) VALUES ('안수진', 'user', '$2a$10$XLXsZbafQ/6hGxZ6NQ3ZvOXbN/GkCBc1oP3/wJ/gC6qAay9tfe8b2', '010-1111-1111');
+INSERT INTO "user" (name, id, password, phone_number) VALUES ('조유정', 'admin', '$2a$10$XLXsZbafQ/6hGxZ6NQ3ZvOXbN/GkCBc1oP3/wJ/gC6qAay9tfe8b2', '01012345678');
+INSERT INTO "user" (name, id, password, phone_number) VALUES ('안수진', 'user', '$2a$10$XLXsZbafQ/6hGxZ6NQ3ZvOXbN/GkCBc1oP3/wJ/gC6qAay9tfe8b2', '01011111111');
 
 
 INSERT INTO setting (user_id, alram, detect_alram, sos_alram, sos_level) VALUES (1, 1, 1, 1, 1);
 
-INSERT INTO report (type,title ,content, phone_number, user_id, voice_id) VALUES ('REPORT_TYPE_FRAUD','언제언제전화', '국민 은행에서 사기 전화','010-0000-0000', 1, 1);
-INSERT INTO report (type,title, content, phone_number, user_id, voice_id) VALUES ('REPORT_TYPE_IMPERSONATING','몇시몇분전화', '검찰청을 사칭해서 개인정보 빼돌리려는 전화였어요','010-0000-0001', 1, 2);
+INSERT INTO report (type,title ,content, phone_number, user_id, voice_id) VALUES ('REPORT_TYPE_FRAUD','언제언제전화', '국민 은행에서 사기 전화','01000000000', 1, 1);
+INSERT INTO report (type,title, content, phone_number, user_id, voice_id) VALUES ('REPORT_TYPE_IMPERSONATING','몇시몇분전화', '검찰청을 사칭해서 개인정보 빼돌리려는 전화였어요','01000000001', 1, 2);
 
-INSERT INTO report (type,title ,content, phone_number, user_id, voice_id) VALUES ('REPORT_TYPE_FRAUD','언제언제 전화임', '대구은행에서 걸려온 사기 전화','010-0000-0000', 2, 3);
-INSERT INTO report (type,title, content, phone_number, user_id, voice_id) VALUES ('REPORT_TYPE_INDUCE','몇시몇분 전화', '국민 은행에서 사기 전화','010-0000-0001', 2, 4);
+INSERT INTO report (type,title ,content, phone_number, user_id, voice_id) VALUES ('REPORT_TYPE_FRAUD','언제언제 전화임', '대구은행에서 걸려온 사기 전화','01000000000', 2, 3);
+INSERT INTO report (type,title, content, phone_number, user_id, voice_id) VALUES ('REPORT_TYPE_INDUCE','몇시몇분 전화', '국민 은행에서 사기 전화','01000000001', 2, 4);
 
 INSERT INTO sos (user_id, phone_number, relation, level) VALUES  (1, '01043213042', '가족', 3);
 INSERT INTO sos (user_id, phone_number, relation, level) VALUES  (1, '01043213042', '친구', 2);
