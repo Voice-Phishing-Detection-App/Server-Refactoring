@@ -6,6 +6,7 @@ import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
 import PhishingUniv.Phinocchio.domain.Login.security.UserDetailsImpl;
 import PhishingUniv.Phinocchio.domain.Report.dto.ReportDto;
+import PhishingUniv.Phinocchio.domain.Report.dto.ReportWithoutDoubtDto;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.Report.repository.ReportRepository;
 import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
@@ -34,7 +35,7 @@ public class ReportService {
 
         Long userId = userEntity.getUserId();
 
-        ReportEntity reportEntity = new ReportEntity(reportDto.getType(), reportDto.getContent()
+        ReportEntity reportEntity = new ReportEntity(reportDto.getType(), reportDto.getTitle(), reportDto.getContent()
                                                 ,reportDto.getPhoneNumber(),userId,reportDto.getVoiceId());
 
         Long reportId = reportRepository.save(reportEntity).getReportId();
@@ -47,6 +48,31 @@ public class ReportService {
 
 
         return reportEntity;
+    }
+
+    public ReportEntity addReportWithoutDoubt(ReportWithoutDoubtDto reportDto)
+    {
+        String ID = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity =userRepository.findById(ID).orElseThrow(
+                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+
+        Long userId = userEntity.getUserId();
+
+        ReportEntity reportEntity = ReportEntity.builder()
+                .type(reportDto.getType())
+                .title(reportDto.getTitle())
+                .content(reportDto.getContent())
+                .phoneNumber(reportDto.getPhoneNumber())
+                .userId(userId).build();
+
+
+
+
+        //doubt에 있는 report_id update해주어야함
+        //doubtId
+
+
+        return reportRepository.save(reportEntity);
     }
 
     public List<ReportEntity> getReports()

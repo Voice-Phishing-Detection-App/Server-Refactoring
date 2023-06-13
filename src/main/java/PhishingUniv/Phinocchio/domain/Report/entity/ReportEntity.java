@@ -23,6 +23,9 @@ public class ReportEntity extends Timestamp {
     @Column(name = "type", nullable = false, length = 50)
     private ReportType type;
 
+    @Column(name="title", nullable = false, length = 50)
+    private String title;
+
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -32,11 +35,12 @@ public class ReportEntity extends Timestamp {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "voice_id", nullable = false)
+    @Column(name = "voice_id")
     private Long voiceId;
 
-    public ReportEntity(ReportType reportType, String content, String phoneNumber, Long userId, Long voiceId)
+    public ReportEntity(ReportType reportType, String title, String content, String phoneNumber, Long userId, Long voiceId)
     {
+        this.title = title;
         this.type = reportType;
         this.content = content;
         this.phoneNumber = phoneNumber;
