@@ -6,6 +6,7 @@ import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
+import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.Setting.entity.SettingEntity;
 import PhishingUniv.Phinocchio.domain.Setting.repository.SettingRepository;
 import PhishingUniv.Phinocchio.domain.Sos.dto.MessageDTO;
@@ -18,6 +19,7 @@ import PhishingUniv.Phinocchio.domain.Voice.entity.VoiceEntity;
 import PhishingUniv.Phinocchio.domain.Voice.repository.VoiceRepository;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
+import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.exception.Setting.SettingAppException;
@@ -59,6 +61,18 @@ public class DoubtService {
 
     private final SmsService smsService;
 
+    //의심 목록 조회
+    public List<DoubtEntity> getDoubtList(){
+        String ID = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity =userRepository.findById(ID).orElseThrow(
+                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+
+        Long userId = userEntity.getUserId();
+        List<DoubtEntity> doubtEntities = doubtRepository.findDoubtEntitiesByUserId(userId);
+
+        return doubtEntities;
+
+    }
     private void addDoubt(DoubtRequestDto doubtRequestDto, String text, int level) {
         // 목소리 저장
         VoiceEntity voiceEntity = new VoiceEntity();

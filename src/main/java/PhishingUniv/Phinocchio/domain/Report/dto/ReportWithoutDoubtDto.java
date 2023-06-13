@@ -1,14 +1,12 @@
 package PhishingUniv.Phinocchio.domain.Report.dto;
 
-
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportType;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ReportDto {
-
+public class ReportWithoutDoubtDto {
     private ReportType type;
 
     private String content;
@@ -17,8 +15,5 @@ public class ReportDto {
 
     private String phoneNumber;
 
-    private Long voiceId;
 
-    private Long doubtId;
 }
-

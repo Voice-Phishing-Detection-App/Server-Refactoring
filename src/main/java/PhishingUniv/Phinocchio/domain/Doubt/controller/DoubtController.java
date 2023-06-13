@@ -1,10 +1,12 @@
 package PhishingUniv.Phinocchio.domain.Doubt.controller;
 
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,4 +28,9 @@ public class DoubtController {
         return doubtService.doubt(doubtDto);
     }
 
+
+    @GetMapping("/doubt/get")
+    public List<DoubtEntity> getDoubtList(){
+        return doubtService.getDoubtList();
+    }
 }
