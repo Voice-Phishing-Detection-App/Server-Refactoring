@@ -8,8 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class DoubtRequestDto {
-    private Long userId;
-
     private String phoneNumber;
 
     private String text;
