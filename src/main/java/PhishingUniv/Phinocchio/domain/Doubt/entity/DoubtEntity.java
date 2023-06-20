@@ -25,6 +25,9 @@ public class DoubtEntity extends Timestamp {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Column(name = "voiceId", nullable = false)
     private Long voice_id;
 
