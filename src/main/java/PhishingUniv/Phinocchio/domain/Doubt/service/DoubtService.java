@@ -39,6 +39,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,10 +64,29 @@ public class DoubtService {
 
     private final SmsService smsService;
 
+    public String getCurrentTime() {
+        LocalDate nowDate = LocalDate.now();
+        LocalTime nowTime = LocalTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("a hh:mm");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(nowDate.getYear())
+                .append('-')
+                .append(nowDate.getMonthValue())
+                .append('-')
+                .append(nowDate.getDayOfMonth())
+                .append(' ')
+                .append(nowTime.format(formatter))
+                .append(" 통화내역");
+
+        return sb.toString();
+    }
+
     //의심 목록 조회
     public List<DoubtEntity> getDoubtList(){
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserEntity userEntity =userRepository.findById(ID).orElseThrow(
+        UserEntity userEntity = userRepository.findById(ID).orElseThrow(
                 ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
 
         Long userId = userEntity.getUserId();
@@ -94,6 +116,7 @@ public class DoubtService {
         doubtEntity.setPhoneNumber(doubtRequestDto.getPhoneNumber());
         doubtEntity.setLevel(level);
         doubtEntity.setUserId(userId);
+        doubtEntity.setTitle(getCurrentTime());
         doubtEntity.setVoice_id(savedVoiceEntity.getVoiceId());
         DoubtEntity savedDoubtEntity = doubtRepository.save(doubtEntity);
         System.out.println(savedDoubtEntity);
