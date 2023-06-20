@@ -156,7 +156,7 @@ public class DoubtService {
             return ResponseEntity.ok("not set detect alram");
 
         // 긴급 연락처 알람 설정 한 경우
-        if(settingEntity.getSosAlram()) {
+        if(settingEntity.getSosAlram() && level > 0) {
             sendSms(level);
         }
 
