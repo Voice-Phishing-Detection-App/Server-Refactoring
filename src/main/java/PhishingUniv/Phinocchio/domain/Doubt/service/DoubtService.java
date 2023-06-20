@@ -74,6 +74,13 @@ public class DoubtService {
 
     }
     private void addDoubt(DoubtRequestDto doubtRequestDto, String text, int level) {
+        // userId 불러오기
+        String ID = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity = userRepository.findById(ID).orElseThrow(
+                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+
+        Long userId = userEntity.getUserId();
+
         // 목소리 저장
         VoiceEntity voiceEntity = new VoiceEntity();
         voiceEntity.setText(text);
@@ -86,7 +93,7 @@ public class DoubtService {
         DoubtEntity doubtEntity = new DoubtEntity();
         doubtEntity.setPhoneNumber(doubtRequestDto.getPhoneNumber());
         doubtEntity.setLevel(level);
-        doubtEntity.setUserId(doubtRequestDto.getUserId());
+        doubtEntity.setUserId(userId);
         doubtEntity.setVoice_id(savedVoiceEntity.getVoiceId());
         DoubtEntity savedDoubtEntity = doubtRepository.save(doubtEntity);
         System.out.println(savedDoubtEntity);
@@ -118,6 +125,12 @@ public class DoubtService {
     }
 
     public ResponseEntity<?> doubt(DoubtRequestDto doubtRequestDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+        // userId 불러오기
+        String ID = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity = userRepository.findById(ID).orElseThrow(
+                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+
+        Long userId = userEntity.getUserId();
 
         // 머신러닝 서버로 mlRequestDto를 전송하고 응답을 받음
         MLRequestDto mlRequestDto = new MLRequestDto(doubtRequestDto.getText());
@@ -134,10 +147,8 @@ public class DoubtService {
             addDoubt(doubtRequestDto, text, level);
         }
 
-
-
         // 알람 설정 확인
-        SettingEntity settingEntity = settingRepository.findByUserId(doubtRequestDto.getUserId())
+        SettingEntity settingEntity = settingRepository.findByUserId(userId)
                 .orElseThrow(() -> new SettingAppException(SettingErrorCode.SETTING_NOT_FOUND, "설정을 불러올 수 없습니다."));
 
         // 보이스피싱 알람 설정 안 한 경우
