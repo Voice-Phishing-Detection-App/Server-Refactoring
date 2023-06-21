@@ -1,7 +1,5 @@
 package PhishingUniv.Phinocchio.domain.Report.service;
 
-import PhishingUniv.Phinocchio.domain.Report.dto.ReportDto;
-import PhishingUniv.Phinocchio.domain.Report.dto.SearchRequestDto;
 import PhishingUniv.Phinocchio.domain.Report.dto.SearchResponseDto;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportType;
@@ -22,6 +20,7 @@ public class SearchService {
         List<ReportEntity> reportList = reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
         List<ReportType> reportTypes = reportList.stream()
                 .map(ReportEntity::getType)
+                .distinct()
                 .collect(Collectors.toList());
 
         Long reportCount = reportRepository.countByPhoneNumber(phoneNumber);
