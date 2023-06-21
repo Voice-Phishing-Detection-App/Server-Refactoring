@@ -18,7 +18,7 @@ public class SearchService {
 
     private final ReportRepository reportRepository;
 
-    public SearchResponseDto getNumberSearch(String phoneNumber){
+    public SearchResponseDto getReportCount(String phoneNumber){
         List<ReportEntity> reportList = reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
         List<ReportType> reportTypes = reportList.stream()
                 .map(ReportEntity::getType)
@@ -33,7 +33,7 @@ public class SearchService {
         return searchResponseDto;
     }
 
-    public List<ReportEntity> getReportsByPhoneNumber(String phoneNumber){
+    public List<ReportEntity> getReportDetail(String phoneNumber){
         return reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
     }
 }
