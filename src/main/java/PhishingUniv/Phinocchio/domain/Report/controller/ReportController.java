@@ -50,14 +50,14 @@ public class ReportController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<SearchResponseDto> getNumberSearch(@RequestBody SearchRequestDto searchRequestDto){
-        SearchResponseDto searchResponseDto = searchService.getNumberSearch(searchRequestDto.getPhoneNumber());
+    public ResponseEntity<SearchResponseDto> getReportCount(@RequestBody SearchRequestDto searchRequestDto){
+        SearchResponseDto searchResponseDto = searchService.getReportCount(searchRequestDto.getPhoneNumber());
 
         return ResponseEntity.ok(searchResponseDto);
     }
 
     @PostMapping("/searchList")
-    public List<ReportEntity> getReportsByPhoneNumber(@RequestBody SearchRequestDto searchRequestDto){
-        return searchService.getReportsByPhoneNumber(searchRequestDto.getPhoneNumber());
+    public List<ReportEntity> getReportDetail(@RequestBody SearchRequestDto searchRequestDto){
+        return searchService.getReportDetail(searchRequestDto.getPhoneNumber());
     }
 }

@@ -1,7 +1,5 @@
 package PhishingUniv.Phinocchio.domain.Report.service;
 
-import PhishingUniv.Phinocchio.domain.Report.dto.ReportDto;
-import PhishingUniv.Phinocchio.domain.Report.dto.SearchRequestDto;
 import PhishingUniv.Phinocchio.domain.Report.dto.SearchResponseDto;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportType;
@@ -18,22 +16,21 @@ public class SearchService {
 
     private final ReportRepository reportRepository;
 
-    public SearchResponseDto getNumberSearch(String phoneNumber){
+    public SearchResponseDto getReportCount(String phoneNumber){
         List<ReportEntity> reportList = reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
         List<ReportType> reportTypes = reportList.stream()
                 .map(ReportEntity::getType)
+                .distinct()
                 .collect(Collectors.toList());
 
         Long reportCount = reportRepository.countByPhoneNumber(phoneNumber);
-        SearchResponseDto searchResponseDto = new SearchResponseDto(phoneNumber, reportCount, reportTypes);
-
-        System.out.println(reportTypes);
-        System.out.println(searchResponseDto);
-
-        return searchResponseDto;
+        if(reportCount == 0){
+            reportTypes.add(ReportType.REPORT_TYPE_NONE);
+        }
+        return new SearchResponseDto(phoneNumber, reportCount, reportTypes);
     }
 
-    public List<ReportEntity> getReportsByPhoneNumber(String phoneNumber){
+    public List<ReportEntity> getReportDetail(String phoneNumber){
         return reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
     }
 }
