@@ -7,10 +7,11 @@ import lombok.Getter;
 @Getter
 public enum ReportType {
 
-    REPORT_TYPE_FRAUD(0,"사기"),
-    REPORT_TYPE_IMPERSONATING(1,"사칭"),
-    REPORT_TYPE_INDUCE(2,"설치유도"),
-    REPORT_TYPE_DISGUISE(3,"사고빙자");
+    REPORT_TYPE_NONE(0, "신고 내역 없음"),
+    REPORT_TYPE_FRAUD(1,"사기"),
+    REPORT_TYPE_IMPERSONATING(2,"사칭"),
+    REPORT_TYPE_INDUCE(3,"설치유도"),
+    REPORT_TYPE_DISGUISE(4,"사고빙자");
 
     private Integer Code;
     private String reportType;

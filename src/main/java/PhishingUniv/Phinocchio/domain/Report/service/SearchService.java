@@ -24,12 +24,10 @@ public class SearchService {
                 .collect(Collectors.toList());
 
         Long reportCount = reportRepository.countByPhoneNumber(phoneNumber);
-        SearchResponseDto searchResponseDto = new SearchResponseDto(phoneNumber, reportCount, reportTypes);
-
-        System.out.println(reportTypes);
-        System.out.println(searchResponseDto);
-
-        return searchResponseDto;
+        if(reportCount == 0){
+            reportTypes.add(ReportType.REPORT_TYPE_NONE);
+        }
+        return new SearchResponseDto(phoneNumber, reportCount, reportTypes);
     }
 
     public List<ReportEntity> getReportDetail(String phoneNumber){
