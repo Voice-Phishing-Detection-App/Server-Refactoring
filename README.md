@@ -42,6 +42,6 @@
 
   
 ### 구현 
-- [김민주](https://github.com/miiiinju)
+- [김민주](https://github.com/miiiinju1)
 - [안수진](https://github.com/ssuzyn)
 - [조유정](https://github.com/hiyoojeong)
