@@ -34,6 +34,9 @@ public class UserEntity extends Timestamp{
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
+    @Column(name = "fcm_token", nullable = false)
+    private String fcmToken;
+
     /*@Column(name = "registration_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date registration_date;
@@ -51,6 +54,7 @@ public class UserEntity extends Timestamp{
         this.id = signupRequestDto.getId();
         this.name=signupRequestDto.getName();
         this.password = signupRequestDto.getPassword();
-        this.phoneNumber= signupRequestDto.getPhoneNumber();
+        this.phoneNumber = signupRequestDto.getPhoneNumber();
+        this.fcmToken = signupRequestDto.getFcmToken();
     }
 }

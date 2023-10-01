@@ -40,7 +40,6 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(@RequestBody SignupRequestDto requestDto) {
-
         return userService.registerUser(requestDto);
 
 
