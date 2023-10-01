@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 public class MLService {
 
     private static RestTemplate restTemplate = null;
-    private static final String MLServerUrl = "https://225e-119-70-86-177.ngrok-free.app/predict";
+    private static final String MLServerUrl = "https://ae52-165-229-125-226.ngrok-free.app/predict";
 
     public MLService() {
         this.restTemplate = new RestTemplate();
