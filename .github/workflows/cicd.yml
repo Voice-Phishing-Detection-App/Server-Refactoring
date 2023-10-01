@@ -75,4 +75,6 @@ jobs:
           key: ${{ secrets.SSH_SECRET_ACCESS_KEY }}
           port: 22
           script: |
+            ./phinocchio-server/deploy.sh
+            
             
