@@ -9,12 +9,12 @@
 
 
 
-### 📌 깃 사용 전략
-> 각자 Fork -> Commit -> Push -> PR -> Merge -> Pull받고 작업
+### 📌 Git-Flow 전략
+> dev 브랜치 연결 -> issue 생성 -> 개발 -> Commit -> Push -> PR -> Merge
 <details>
 <summary> 컨벤션 보기</summary>
 <div markdown="1">
-  
+
 ```
 [FEAT] 새로운 기능 추가
 [FIX] 버그 수정
