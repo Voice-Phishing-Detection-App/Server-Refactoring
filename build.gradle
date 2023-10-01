@@ -48,6 +48,16 @@ dependencies {
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
 
+	// twilio
+	implementation group: 'com.twilio.sdk', name: 'twilio', version: '10.0.0-rc.4'
+	compileOnly group: "com.twilio.sdk", name: "twilio", version: "8.0.+"
+	compileOnly group: "com.sparkjava", name: "spark-core", version: "2.7.1"
+
+
+
+	// fcm
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '6.8.1'
+
 
 }
 
