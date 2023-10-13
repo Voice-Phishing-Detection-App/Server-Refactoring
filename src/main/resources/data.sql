@@ -1,6 +1,5 @@
 INSERT INTO "user" (name, id, password, phone_number, fcm_token) VALUES ('조유정', 'admin', '$2a$10$XLXsZbafQ/6hGxZ6NQ3ZvOXbN/GkCBc1oP3/wJ/gC6qAay9tfe8b2', '01012345678', 'FCM_TOKEN1');
 INSERT INTO "user" (name, id, password, phone_number, fcm_token) VALUES ('안수진', 'user', '$2a$10$XLXsZbafQ/6hGxZ6NQ3ZvOXbN/GkCBc1oP3/wJ/gC6qAay9tfe8b2', '01011111111', 'FCM_TOKEN2');
-INSERT INTO "user" (name, id, password, phone_number, fcm_token) VALUES ('김트와일라잇', 'twilio', '$2a$10$XLXsZbafQ/6hGxZ6NQ3ZvOXbN/GkCBc1oP3/wJ/gC6qAay9tfe8b2', '+17606215444', 'd6IAxzj7SkSFho-LCNoY-2:APA91bF6r8pbThNxqBfVShMLlBcnjq45wsyuePPE_sK3nJXCdf80kh6apbyXM5CZXCTJgqVF3p8_s5OMKsuD8_gMoBw6MfXd9YHv396Qfd0642Ws03kJavQEjJwCMC1hf7fSQdhwvoWE');
 
 
 INSERT INTO setting (user_id, alram, detect_alram, sos_alram, sos_level) VALUES (1, 1, 1, 1, 1);
