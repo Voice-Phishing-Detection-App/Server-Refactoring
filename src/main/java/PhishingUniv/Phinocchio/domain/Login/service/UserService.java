@@ -38,6 +38,14 @@ public class UserService {
 
     }
 
+    private void validateDuplicatePhoneNumber(SignupRequestDto requestDto)
+    {
+        userRepository.findByPhoneNumber(requestDto.getPhoneNumber())
+                .ifPresent(m ->{
+                    throw new LoginAppException(LoginErrorCode.PHONENUMBER_DUPLICATED, "이미 사용중인 전화번호입니다.");
+                });
+    }
+
     private void validateDuplicateDevice(SignupRequestDto requestDto)
     {
         userRepository.findByFcmToken(requestDto.getFcmToken())
@@ -97,6 +105,7 @@ public class UserService {
     {
         //같은 id를 가지는 중복 회원 X
         validateDuplicateUser(requestDto);
+        validateDuplicatePhoneNumber(requestDto);
         validateDuplicateDevice(requestDto);
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         UserEntity user = new UserEntity(requestDto);
