@@ -15,6 +15,8 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
     Optional<UserEntity> findByFcmToken(String fcmToken);
 
+    Optional<UserEntity> findByIdAndFcmToken(String id, String fcmToken);
+
     Optional<UserEntity> findByPhoneNumber(String phoneNumber);
     Optional<UserEntity> findByName(String name);
 
