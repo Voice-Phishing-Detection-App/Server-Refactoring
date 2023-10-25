@@ -1,14 +1,13 @@
 package PhishingUniv.Phinocchio.exception.FCM;
 
 
-import lombok.AllArgsConstructor;
+import PhishingUniv.Phinocchio.exception.ErrorCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public class FCMAppException extends RuntimeException{
-    private FCMErrorCode errorCode;
-    private String message;
-
+    private final ErrorCode errorCode;
 
 }
