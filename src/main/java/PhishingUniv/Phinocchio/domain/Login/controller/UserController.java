@@ -6,6 +6,8 @@ import PhishingUniv.Phinocchio.domain.Login.dto.TokenDto;
 import PhishingUniv.Phinocchio.domain.Login.security.UserDetailsImpl;
 import PhishingUniv.Phinocchio.domain.Login.service.UserService;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.security.Security;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "UserController", description = "로그인, 회원가입을 하는 컨트롤러")
 public class UserController {
 
     private final UserService userService;
@@ -30,6 +33,7 @@ public class UserController {
 
 
     @PostMapping("/login")
+    @Operation(summary = "로그인을 하는 컨트롤러", description = "로그인을 하는 컨트롤러입니다.")
     public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
         String token= userService.login(loginDto);
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -39,6 +43,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
+    @Operation(summary = "회원가입을 하는 컨트롤러", description = "회원가입을 하는 컨트롤러입니다.")
     public String signup(@RequestBody SignupRequestDto requestDto) {
         return userService.registerUser(requestDto);
 
