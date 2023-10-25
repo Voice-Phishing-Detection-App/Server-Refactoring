@@ -38,21 +38,21 @@ public class SosService {
         return modelMapper.map(sosUpdateDto, SosEntity.class);
     }
 
-    public ResponseEntity sosList() {
+    public ResponseEntity sosList() throws LoginAppException{
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, "사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
         Long userId = userEntity.getUserId();
 
         return ResponseEntity.ok(sosRepository.findByUserId(userId));
     }
 
-    public ResponseEntity addSos(SosDto sosDto) {
+    public ResponseEntity addSos(SosDto sosDto) throws LoginAppException{
         SosEntity sosEntity = convertToEntity(sosDto);
 
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, "사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
         Long userId = userEntity.getUserId();
 
         sosEntity.setUserId(userId);
@@ -61,15 +61,15 @@ public class SosService {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    public ResponseEntity updateSos(SosUpdateDto sosUpdateDto) {
+    public ResponseEntity updateSos(SosUpdateDto sosUpdateDto) throws SosAppException, LoginAppException{
         sosRepository.findById(sosUpdateDto.getSosId())
-                .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND, "존재하지 않는 긴급연락처입니다."));
+                .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND));
 
         SosEntity sosEntity = convertToEntity(sosUpdateDto);
 
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, "사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
         Long userId = userEntity.getUserId();
 
         sosEntity.setUserId(userId);
@@ -79,9 +79,9 @@ public class SosService {
 
     }
 
-    public ResponseEntity deleteSos(SosDeleteDto sosDeleteDto) {
+    public ResponseEntity deleteSos(SosDeleteDto sosDeleteDto) throws SosAppException{
         SosEntity sosEntity = sosRepository.findById(sosDeleteDto.getSosId())
-                .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND, "존재하지 않는 긴급연락처입니다."));
+                .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND));
 
         sosRepository.delete(sosEntity);
 

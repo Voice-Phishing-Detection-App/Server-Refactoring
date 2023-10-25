@@ -1,39 +1,84 @@
 package PhishingUniv.Phinocchio.exception;
 
 
-import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
+import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
+import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
-import org.springframework.http.HttpStatus;
+import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
+import PhishingUniv.Phinocchio.exception.Setting.SettingAppException;
+import PhishingUniv.Phinocchio.exception.Sos.SosAppException;
+import PhishingUniv.Phinocchio.exception.Twilio.TwilioAppException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 
-//@RestControllerAdvice는 App에서 발생하는 예외를 중앙에서 처리한다는 의미
+//App에서 발생하는 예외를 중앙 처리
 @RestControllerAdvice
-public class ExceptionManager {
+@Slf4j
+public class ExceptionManager extends ResponseEntityExceptionHandler {
 
-    //AppException이 발생하면 아래 메서드가 호출되어 예외를 처리함
-
-    @ExceptionHandler(LoginAppException.class)
-    public ResponseEntity<?> appExceptionHandler(LoginAppException e)
+    @ExceptionHandler(DoubtAppException.class)
+    public ResponseEntity<?> doubtAppExceptionHandler(DoubtAppException e)
     {
-
-        //예외 처리 결과를 ResponseEntity를 이용하여 Http로 반환함
-        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
-                .body(e.getErrorCode().name()+" "+e.getMessage());//e.getErrorCode.name()
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
     }
 
-
-
+    @ExceptionHandler(FCMAppException.class)
+    public ResponseEntity<?> fcmAppExceptionHandler(FCMAppException e)
+    {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
 
     @ExceptionHandler(InvalidJwtException.class)
-    public ResponseEntity<?> runtimeExceptionHandler(InvalidJwtException e)
+    public ResponseEntity<?> invalidJwtExceptionHandler(InvalidJwtException e)
     {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
 
-        //HttpStatus enum 형식의 열거형 상수 클래스
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(e.getMessage());
+    @ExceptionHandler(LoginAppException.class)
+    public ResponseEntity<?> loginAppExceptionHandler(LoginAppException e)
+    {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
+
+    @ExceptionHandler(SettingAppException.class)
+    public ResponseEntity<?> settingAppExceptionHandler(SettingAppException e)
+    {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
+
+    @ExceptionHandler(SosAppException.class)
+    public ResponseEntity<?> sosAppExceptionHandler(SosAppException e)
+    {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
+
+    @ExceptionHandler(TwilioAppException.class)
+    public ResponseEntity<?> twilioAppExceptionHandler(TwilioAppException e)
+    {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
+
+    private ResponseEntity<?> handleExceptionInternal(ErrorCode errorCode) {
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(makeErrorResponse(errorCode));
+    }
+
+    private Object makeErrorResponse(ErrorCode errorCode) {
+        return ErrorResponse.builder()
+                .error(errorCode.name())
+                .message(errorCode.getMessage())
+                .build();
     }
 
 }

@@ -41,7 +41,7 @@ public class WebhookController {
         try {
             fcmNotificationService.sendPushNotification(fcmToken);
         } catch (FirebaseMessagingException e) {
-            throw new FCMAppException(FCMErrorCode.FCM_ERROR, "FCM 관련 오류입니다.");
+            throw new FCMAppException(FCMErrorCode.FCM_ERROR);
         }
     }
 }

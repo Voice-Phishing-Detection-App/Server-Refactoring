@@ -48,7 +48,7 @@ class UserControllerTest {
          requestDto.setId("userId");
          requestDto.setName("userName");
          requestDto.setPassword("password");
-         requestDto.setPhone_number("010-0101-0101");
+         requestDto.setPhoneNumber("010-0101-0101");
 
         mockMvc.perform(
                 post("/signup")
@@ -96,7 +96,7 @@ class UserControllerTest {
     void login_fail_username() throws Exception {
 
         when(userService.login(any()))
-                .thenThrow(new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, ""));
+                .thenThrow(new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
 
 
 
@@ -120,7 +120,7 @@ class UserControllerTest {
     @WithAnonymousUser
     void login_fail_password() throws Exception {
         when(userService.login(any()))
-                .thenThrow(new LoginAppException(LoginErrorCode.INVALID_PASSWORD, ""));
+                .thenThrow(new LoginAppException(LoginErrorCode.INVALID_PASSWORD));
 
 
         LoginDto loginDto = new LoginDto();
@@ -146,7 +146,7 @@ class UserControllerTest {
         requestDto.setId("userId");
         requestDto.setName("userName");
         requestDto.setPassword("password");
-        requestDto.setPhone_number("010-0101-0101");
+        requestDto.setPhoneNumber("010-0101-0101");
 
         mockMvc.perform(
                         post("/signup")
