@@ -26,25 +26,19 @@ public class TwilioTokenService {
 
 
     public AccessToken generateToken(TwilioTokenRequestDto twilioTokenRequestDto){
-
-        String id = SecurityContextHolder.getContext().getAuthentication().getName();
         String fcmToken = twilioTokenRequestDto.getFcmToken();
-        AccessToken token = null;
+        AccessToken token;
 
-        UserEntity userEntity = userRepository.findByIdAndFcmToken(id, fcmToken)
-                .orElseThrow(() -> new FCMAppException(FCMErrorCode.FCM_NOT_FOUND, "사용자의 fcm token과 일치하지 않습니다."));
+        // 음성 권한 부여
+        VoiceGrant grant = new VoiceGrant();
+        grant.setOutgoingApplicationSid(outgoingApplicationSid);
 
-        if(userEntity != null){
-            // 음성 권한 부여
-            VoiceGrant grant = new VoiceGrant();
-            grant.setOutgoingApplicationSid(outgoingApplicationSid);
+        // 액세스 토큰 만들기
+        token = new AccessToken.Builder(TWILIO_ACCOUNT_SID, TWILIO_API_KEY, TWILIO_API_SECRET)
+                .identity(fcmToken)
+                .grant(grant)
+                .build();
 
-            // 액세스 토큰 만들기
-            token = new AccessToken.Builder(TWILIO_ACCOUNT_SID, TWILIO_API_KEY, TWILIO_API_SECRET)
-                    .identity(fcmToken)
-                    .grant(grant)
-                    .build();
-        }
 
         return token;
 
