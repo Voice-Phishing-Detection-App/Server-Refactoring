@@ -10,7 +10,10 @@ import PhishingUniv.Phinocchio.domain.Report.dto.ReportWithoutDoubtDto;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.Report.repository.ReportRepository;
 import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
+import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
+import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
+import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,11 +30,11 @@ public class ReportService {
 
     //userId가져오기 위해서 임시로 만들어둔 것, 캐싱으로 나중에 수정해야하는 부분
     private final UserRepository userRepository;
-    public ReportEntity addReport(ReportDto reportDto)
+    public ReportEntity addReport(ReportDto reportDto)throws InvalidJwtException
     {
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity =userRepository.findById(ID).orElseThrow(
-                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+                ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
         Long userId = userEntity.getUserId();
 
@@ -40,7 +43,8 @@ public class ReportService {
 
         Long reportId = reportRepository.save(reportEntity).getReportId();
 
-        DoubtEntity doubtEntity = doubtRepository.findById(reportDto.getDoubtId()).orElseThrow(() -> new IllegalArgumentException("doubt 검색 오류"));
+        DoubtEntity doubtEntity = doubtRepository.findById(reportDto.getDoubtId()).orElseThrow(() -> new DoubtAppException(
+                DoubtErrorCode.DOUBT_NOT_FOUND));
         doubtEntity.setReport_id(reportId);
         doubtRepository.save(doubtEntity);
         //doubt에 있는 report_id update해주어야함
@@ -50,11 +54,11 @@ public class ReportService {
         return reportEntity;
     }
 
-    public ReportEntity addReportWithoutDoubt(ReportWithoutDoubtDto reportDto)
+    public ReportEntity addReportWithoutDoubt(ReportWithoutDoubtDto reportDto)throws InvalidJwtException
     {
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity =userRepository.findById(ID).orElseThrow(
-                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+                ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
         Long userId = userEntity.getUserId();
 
@@ -75,11 +79,11 @@ public class ReportService {
         return reportRepository.save(reportEntity);
     }
 
-    public List<ReportEntity> getReports()
+    public List<ReportEntity> getReports() throws InvalidJwtException
     {
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity =userRepository.findById(ID).orElseThrow(
-                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+                ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
         Long userId = userEntity.getUserId();
         List<ReportEntity> reportEntities = reportRepository.findReportEntitiesByUserId(userId);

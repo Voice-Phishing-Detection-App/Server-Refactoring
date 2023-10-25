@@ -29,6 +29,7 @@ import PhishingUniv.Phinocchio.exception.Sos.SosErrorCode;
 import PhishingUniv.Phinocchio.exception.Voice.VoiceAppException;
 import PhishingUniv.Phinocchio.exception.Voice.VoiceErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.twilio.twiml.voice.Say.Voice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -84,10 +85,10 @@ public class DoubtService {
     }
 
     //의심 목록 조회
-    public List<DoubtEntity> getDoubtList(){
+    public List<DoubtEntity> getDoubtList() throws InvalidJwtException{
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(ID).orElseThrow(
-                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+                ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
         Long userId = userEntity.getUserId();
         List<DoubtEntity> doubtEntities = doubtRepository.findDoubtEntitiesByUserId(userId);
@@ -95,11 +96,11 @@ public class DoubtService {
         return doubtEntities;
 
     }
-    private void addDoubt(DoubtRequestDto doubtRequestDto, String text, int level) {
+    private void addDoubt(DoubtRequestDto doubtRequestDto, String text, int level) throws InvalidJwtException, DoubtAppException, VoiceAppException {
         // userId 불러오기
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(ID).orElseThrow(
-                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+                ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
         Long userId = userEntity.getUserId();
 
@@ -108,7 +109,7 @@ public class DoubtService {
         voiceEntity.setText(text);
         VoiceEntity savedVoiceEntity = voiceRepository.save(voiceEntity);
         if(savedVoiceEntity == null) {
-            throw new DoubtAppException(DoubtErrorCode.FAILED_TO_SAVE, "의심내역 저장에 실패하였습니다.");
+            throw new DoubtAppException(DoubtErrorCode.FAILED_TO_SAVE);
         }
 
         // 의심내역 저장
@@ -121,16 +122,18 @@ public class DoubtService {
         DoubtEntity savedDoubtEntity = doubtRepository.save(doubtEntity);
         System.out.println(savedDoubtEntity);
         if(savedDoubtEntity == null) {
-            throw new VoiceAppException(VoiceErrorCode.FAILED_TO_SAVE, "목소리 저장에 실패하였습니다.");
+            throw new VoiceAppException(VoiceErrorCode.FAILED_TO_SAVE);
         }
 
     }
 
-    private void sendSms(int level) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    private void sendSms(int level) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException,
+                                                        JsonProcessingException, LoginAppException, SosAppException {
+
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
         // 메세지 설정
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND, "사용자를 불러올 수 없습니다."));
+                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
         String userPhone = userEntity.getPhoneNumber();
         String smsMsg = "[피노키오] " + userPhone + " 번호로 보이스피싱이 감지되었습니다. <" + level +"단계>";
 
@@ -143,15 +146,17 @@ public class DoubtService {
             messageDTO.setTo(sosEntity.getPhoneNumber());
             SmsResponseDTO smsResponseDTO = smsService.sendSms(messageDTO);
             if(!smsResponseDTO.getStatusCode().equals("202"))
-                throw new SosAppException(SosErrorCode.FAILED_TO_SEND_SMS, "메세지 전송 실패");
+                throw new SosAppException(SosErrorCode.FAILED_TO_SEND_SMS);
         }
     }
 
-    public ResponseEntity<?> doubt(DoubtRequestDto doubtRequestDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+    public ResponseEntity<?> doubt(DoubtRequestDto doubtRequestDto) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException,
+            JsonProcessingException, InvalidJwtException, DoubtAppException, SettingAppException {
+
         // userId 불러오기
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(ID).orElseThrow(
-                ()->new InvalidJwtException("addReport, User를 찾을 수 없음"));
+                ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
         Long userId = userEntity.getUserId();
 
@@ -159,7 +164,7 @@ public class DoubtService {
         MLRequestDto mlRequestDto = new MLRequestDto(doubtRequestDto.getText());
         MLResponseDto mlResponseDto = mlService.processText(mlRequestDto);
         if(mlRequestDto == null) {
-            throw new DoubtAppException(DoubtErrorCode.DISCONNCECTED_TO_MLSERVER, "머신러닝 서버와 연결이 되지 않습니다.");
+            throw new DoubtAppException(DoubtErrorCode.DISCONNCECTED_TO_MLSERVER);
         }
 
 
@@ -172,7 +177,7 @@ public class DoubtService {
 
         // 알람 설정 확인
         SettingEntity settingEntity = settingRepository.findByUserId(userId)
-                .orElseThrow(() -> new SettingAppException(SettingErrorCode.SETTING_NOT_FOUND, "설정을 불러올 수 없습니다."));
+                .orElseThrow(() -> new SettingAppException(SettingErrorCode.SETTING_NOT_FOUND));
 
         // 보이스피싱 알람 설정 안 한 경우
         if(!settingEntity.getDetectAlram())

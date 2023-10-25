@@ -112,7 +112,7 @@ public class WebhookService {
         System.out.println();
     }
 
-    public String getTo(String messageBody) {
+    public String getTo(String messageBody) throws TwilioAppException {
         // 문자열 처리로 To 값 추출
         String[] params = messageBody.split("&");
         for (String param : params) {
@@ -121,10 +121,10 @@ public class WebhookService {
                 return keyValue[1].replace("%2B", "+");
             }
         }
-        throw new TwilioAppException(TwilioErrorCode.TWILIO_ERROR, "수신 전화번호를 받아올 수 없습니다.");
+        throw new TwilioAppException(TwilioErrorCode.TWILIO_PHONE_ERROR);
     }
 
-    public String listenWebhook(HttpServletRequest req, HttpServletResponse response) {
+    public String listenWebhook(HttpServletRequest req, HttpServletResponse response) throws TwilioAppException {
 
         String phoneNumber = "";
 
@@ -158,7 +158,7 @@ public class WebhookService {
             response.getWriter().print(voiceResponse.toXml());
 
         } catch (Exception e) {
-            throw new TwilioAppException(TwilioErrorCode.TWILIO_ERROR, "Twilio webhook 관련 오류입니다.");
+            throw new TwilioAppException(TwilioErrorCode.TWILIO_WEBHOOK_ERROR);
         }
 
         return phoneNumber;
