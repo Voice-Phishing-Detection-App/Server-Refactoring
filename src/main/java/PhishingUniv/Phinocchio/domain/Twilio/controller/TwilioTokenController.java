@@ -3,6 +3,8 @@ package PhishingUniv.Phinocchio.domain.Twilio.controller;
 import PhishingUniv.Phinocchio.domain.Twilio.dto.TwilioTokenDto;
 import PhishingUniv.Phinocchio.domain.Twilio.dto.TwilioTokenRequestDto;
 import PhishingUniv.Phinocchio.domain.Twilio.service.TwilioTokenService;
+import PhishingUniv.Phinocchio.exception.ErrorResponse;
+import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
 import com.twilio.jwt.accesstoken.AccessToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +29,9 @@ public class TwilioTokenController {
                 AccessToken token = twilioTokenService.generateToken(twilioTokenRequestDto);
 
             return ResponseEntity.ok().body(new TwilioTokenDto(token.toJwt()));
-        } catch (Exception e) {
+        } catch (FCMAppException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getErrorCode().name(), e.getMessage()));
+        }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
