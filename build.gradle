@@ -1,7 +1,8 @@
 plugins {
 	id 'java'
- 	id 'org.springframework.boot' version '2.7.6'
+	id 'org.springframework.boot' version '2.7.6'
 	id 'io.spring.dependency-management' version '1.1.0'
+
 }
 
 group = 'PhishingUniv'
@@ -30,6 +31,13 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
+	//swagger
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+	// google stt api
+	implementation 'com.google.cloud:google-cloud-speech:4.22.0'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
 
 
 	compileOnly 'org.projectlombok:lombok'

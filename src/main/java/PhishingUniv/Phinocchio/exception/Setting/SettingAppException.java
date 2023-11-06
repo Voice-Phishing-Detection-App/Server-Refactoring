@@ -1,13 +1,11 @@
 package PhishingUniv.Phinocchio.exception.Setting;
 
+import PhishingUniv.Phinocchio.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
 public class SettingAppException extends RuntimeException{
-
-    private SettingErrorCode settingErrorCode;
-    private String message;
-
+    private final ErrorCode errorCode;
 }

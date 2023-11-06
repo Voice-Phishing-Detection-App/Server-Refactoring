@@ -29,28 +29,33 @@ public class UserService {
 
     private final JwtGenerator jwtGenerator;
 
-    private void validateDuplicateUser(SignupRequestDto requestDto)
+    private void validateDuplicateUser(SignupRequestDto requestDto) throws LoginAppException
     {
         userRepository.findById(requestDto.getId())
                 .ifPresent(m ->{
-                    throw new LoginAppException(LoginErrorCode.USERNAME_DUPLICATED, "이미 존재하는 아이디입니다.");
+                    throw new LoginAppException(LoginErrorCode.USERNAME_DUPLICATED);
                 });
 
     }
 
-    private void validateDuplicateDevice(SignupRequestDto requestDto)
+    private void validateDuplicatePhoneNumber(SignupRequestDto requestDto) throws LoginAppException
+    {
+        userRepository.findByPhoneNumber(requestDto.getPhoneNumber())
+                .ifPresent(m ->{
+                    throw new LoginAppException(LoginErrorCode.PHONENUMBER_DUPLICATED);
+                });
+    }
+
+    private void validateDuplicateDevice(SignupRequestDto requestDto) throws LoginAppException
     {
         userRepository.findByFcmToken(requestDto.getFcmToken())
                 .ifPresent(m -> {
-                    throw new LoginAppException(LoginErrorCode.DEVICE_DUPLICATED, "해당 기기에서 사용중인 계정이 존재합니다.");
+                    throw new LoginAppException(LoginErrorCode.DEVICE_DUPLICATED);
                 });
     }
 
     public String login(LoginDto loginDto)
     {
-
-
-
 
         Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -97,6 +102,7 @@ public class UserService {
     {
         //같은 id를 가지는 중복 회원 X
         validateDuplicateUser(requestDto);
+        validateDuplicatePhoneNumber(requestDto);
         validateDuplicateDevice(requestDto);
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         UserEntity user = new UserEntity(requestDto);

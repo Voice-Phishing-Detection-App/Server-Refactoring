@@ -6,7 +6,11 @@ import PhishingUniv.Phinocchio.domain.Twilio.service.WebhookService;
 import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
 import PhishingUniv.Phinocchio.exception.FCM.FCMErrorCode;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,18 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
+@RequiredArgsConstructor
+@Tag(name = "WebhookController", description = "Twilio webhook을 처리하는 컨트롤러")
 public class WebhookController {
 
-    @Autowired
-    private WebhookService twilioService;
+    private final WebhookService twilioService;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private FCMNotificationService fcmNotificationService;
+    private final FCMNotificationService fcmNotificationService;
 
     @PostMapping("/voice")
+    @Operation(summary = "Twilio webhook을 처리하는 컨트롤러", description = "Twilio webhook을 처리하는 컨트롤러입니다.")
     public void voice(HttpServletRequest req, HttpServletResponse response) {
         // twilio webhook 처리
         String phoneNumber = twilioService.listenWebhook(req, response);
@@ -37,7 +41,7 @@ public class WebhookController {
         try {
             fcmNotificationService.sendPushNotification(fcmToken);
         } catch (FirebaseMessagingException e) {
-            throw new FCMAppException(FCMErrorCode.FCM_ERROR, "FCM 관련 오류입니다.");
+            throw new FCMAppException(FCMErrorCode.FCM_ERROR);
         }
     }
 }
