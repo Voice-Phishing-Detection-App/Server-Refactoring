@@ -3,6 +3,7 @@ package PhishingUniv.Phinocchio.exception;
 
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
 import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
+import PhishingUniv.Phinocchio.exception.GoogleSTT.STTAppException;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Setting.SettingAppException;
@@ -22,6 +23,13 @@ public class ExceptionManager extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DoubtAppException.class)
     public ResponseEntity<?> doubtAppExceptionHandler(DoubtAppException e)
+    {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
+
+    @ExceptionHandler(STTAppException.class)
+    public ResponseEntity<?> sttAppExceptionHandler(STTAppException e)
     {
         ErrorCode errorCode = e.getErrorCode();
         return handleExceptionInternal(errorCode);

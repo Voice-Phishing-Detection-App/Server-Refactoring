@@ -34,6 +34,11 @@ dependencies {
 	//swagger
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
+	// google stt api
+	implementation 'com.google.cloud:google-cloud-speech:4.22.0'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
