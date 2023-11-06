@@ -1,7 +1,7 @@
 package PhishingUniv.Phinocchio.domain.Twilio.controller;
 
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
-import PhishingUniv.Phinocchio.domain.Twilio.service.FCMNotificationService;
+import PhishingUniv.Phinocchio.domain.FCM.service.FCMNotificationService;
 import PhishingUniv.Phinocchio.domain.Twilio.service.WebhookService;
 import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
 import PhishingUniv.Phinocchio.exception.FCM.FCMErrorCode;
@@ -39,7 +39,7 @@ public class WebhookController {
         String fcmToken = userRepository.findByPhoneNumber(phoneNumber).orElseThrow().getFcmToken();
         System.out.println("fcmToken = " + fcmToken);
         try {
-            fcmNotificationService.sendPushNotification(fcmToken);
+            fcmNotificationService.sendPushNotification(fcmToken, "call", "incoming");
         } catch (FirebaseMessagingException e) {
             throw new FCMAppException(FCMErrorCode.FCM_ERROR);
         }

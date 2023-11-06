@@ -5,6 +5,7 @@ import PhishingUniv.Phinocchio.domain.Doubt.dto.MLRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
+import PhishingUniv.Phinocchio.domain.FCM.service.FCMNotificationService;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.Setting.entity.SettingEntity;
@@ -19,6 +20,8 @@ import PhishingUniv.Phinocchio.domain.Voice.entity.VoiceEntity;
 import PhishingUniv.Phinocchio.domain.Voice.repository.VoiceRepository;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
+import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
+import PhishingUniv.Phinocchio.exception.FCM.FCMErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
@@ -64,6 +67,8 @@ public class DoubtService {
     private final SosService sosService;
 
     private final SmsService smsService;
+
+    private final FCMNotificationService fcmNotificationService;
 
     public String getCurrentTime() {
         LocalDate nowDate = LocalDate.now();
@@ -175,21 +180,63 @@ public class DoubtService {
             addDoubt(doubtRequestDto, text, level);
         }
 
-        // 알람 설정 확인
-        SettingEntity settingEntity = settingRepository.findByUserId(userId)
-                .orElseThrow(() -> new SettingAppException(SettingErrorCode.SETTING_NOT_FOUND));
+//        // 알람 설정 확인
+//        SettingEntity settingEntity = settingRepository.findByUserId(userId)
+//                .orElseThrow(() -> new SettingAppException(SettingErrorCode.SETTING_NOT_FOUND));
+//
+//        // 보이스피싱 알람 설정 안 한 경우
+//        if(!settingEntity.getDetectAlram())
+//            return ResponseEntity.ok("not set detect alram");
+//
+//        // 긴급 연락처 알람 설정 한 경우
+//        if(settingEntity.getSosAlram() && level > 0) {
+//            sendSms(level);
+//        }
 
-        // 보이스피싱 알람 설정 안 한 경우
-        if(!settingEntity.getDetectAlram())
-            return ResponseEntity.ok("not set detect alram");
-
-        // 긴급 연락처 알람 설정 한 경우
-        if(settingEntity.getSosAlram() && level > 0) {
+        if(level > 0) {
+            // 긴급 연락처 알람 전송
             sendSms(level);
-        }
 
-        // 보이스피싱 알람 설정 한 경우
+            // 보이스피싱 알람 설정 한 경우: push 알람 보내기
+            String fcmToken = getFcmToken(ID);
+            String fcmMessageTitle = setFcmMessageTitle();
+            String fcmMessageBody = setFcmMessageBody(level);
+            sendFCMNotification(fcmToken, fcmMessageTitle, fcmMessageBody);
+        }
         return ResponseEntity.ok(mlResponseDto);
+    }
+
+    private String getFcmToken(String id) {
+        UserEntity user = userRepository.findById(id)
+                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
+        return user.getFcmToken();
+    }
+
+    private void sendFCMNotification(String fcmToken, String title, String body) {
+        try {
+            fcmNotificationService.sendPushNotification(fcmToken,title, body);
+        } catch (Exception e) {
+            throw new FCMAppException(FCMErrorCode.FCM_ERROR);
+        }
+    }
+
+    private String setFcmMessageTitle() {
+        return "[피노키오] 보이스피싱으로 의심되는 통화가 발견되었습니다.";
+    }
+
+    private String setFcmMessageBody(int level) {
+        StringBuilder fcmMessage = new StringBuilder();
+        fcmMessage.append("보이스피싱 \"");
+        if(level == 1) {
+            fcmMessage.append("의심");
+        } else if(level == 2) {
+            fcmMessage.append("경고");
+        } else if(level == 3) {
+            fcmMessage.append("위험");
+        }
+        fcmMessage.append("\" 단계입니다.");
+
+        return fcmMessage.toString();
     }
 
 }

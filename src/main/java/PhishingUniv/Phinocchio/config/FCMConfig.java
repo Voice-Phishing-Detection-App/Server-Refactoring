@@ -1,4 +1,4 @@
-package PhishingUniv.Phinocchio.domain.Twilio.config;
+package PhishingUniv.Phinocchio.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -15,7 +15,7 @@ public class FCMConfig {
     public void init () {
         try{
             FileInputStream serviceAccount =
-                    new FileInputStream("src/main/resources/serviceAccountKey.json");
+                    new FileInputStream("src/main/resources/fcm-service-account-file.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();

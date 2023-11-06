@@ -15,6 +15,7 @@ import com.google.cloud.speech.v1.SpeechClient;
 import com.google.cloud.speech.v1.SpeechRecognitionAlternative;
 import com.google.cloud.speech.v1.SpeechRecognitionResult;
 import com.google.protobuf.ByteString;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,6 +52,14 @@ public class STTService {
         String fileName = AUDIO_FOLDER_PATH + file.getOriginalFilename();
         Path filePath = Paths.get(fileName);
 
+        if (!Files.exists(filePath.getParent())) {
+            try {
+                Files.createDirectories(filePath.getParent());
+            } catch (IOException e) {
+                throw new STTAppException(STTErrorCode.FOLDER_CREATION_ERROR);
+            }
+        }
+
         try {
             Files.write(filePath, file.getBytes());
         } catch (Exception e) {
@@ -71,7 +80,7 @@ public class STTService {
                     RecognitionConfig.newBuilder()
                             .setEncoding(AudioEncoding.LINEAR16)
                             .setLanguageCode("ko-kR")
-                            .setSampleRateHertz(48000)
+                            .setSampleRateHertz(44100)
                             .build();
             RecognitionAudio audio = RecognitionAudio.newBuilder().setContent(audioBytes).build();
 
