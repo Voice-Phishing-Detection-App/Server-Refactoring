@@ -80,7 +80,7 @@ public class STTService {
                     RecognitionConfig.newBuilder()
                             .setEncoding(AudioEncoding.LINEAR16)
                             .setLanguageCode("ko-kR")
-                            .setSampleRateHertz(48000)
+                            .setSampleRateHertz(44100)
                             .build();
             RecognitionAudio audio = RecognitionAudio.newBuilder().setContent(audioBytes).build();
 
