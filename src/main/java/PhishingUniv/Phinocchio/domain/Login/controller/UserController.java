@@ -2,6 +2,7 @@ package PhishingUniv.Phinocchio.domain.Login.controller;
 
 import PhishingUniv.Phinocchio.domain.Login.dto.LoginDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
+import PhishingUniv.Phinocchio.domain.Login.dto.SignupResponseDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.TokenDto;
 import PhishingUniv.Phinocchio.domain.Login.security.UserDetailsImpl;
 import PhishingUniv.Phinocchio.domain.Login.service.UserService;
@@ -44,7 +45,7 @@ public class UserController {
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입을 하는 컨트롤러", description = "회원가입을 하는 컨트롤러입니다.")
-    public String signup(@RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<?> signup(@RequestBody SignupRequestDto requestDto) {
         return userService.registerUser(requestDto);
 
 

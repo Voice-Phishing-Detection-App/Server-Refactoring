@@ -2,6 +2,7 @@ package PhishingUniv.Phinocchio.domain.Login.service;
 
 import PhishingUniv.Phinocchio.domain.Login.dto.LoginDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
+import PhishingUniv.Phinocchio.domain.Login.dto.SignupResponseDto;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
 import PhishingUniv.Phinocchio.domain.Login.security.JwtGenerator;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
@@ -9,6 +10,7 @@ import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -98,7 +100,7 @@ public class UserService {
 */
     }
 
-    public String registerUser(SignupRequestDto requestDto)
+    public ResponseEntity<?> registerUser(SignupRequestDto requestDto)
     {
         //같은 id를 가지는 중복 회원 X
         validateDuplicateUser(requestDto);
@@ -107,7 +109,8 @@ public class UserService {
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         UserEntity user = new UserEntity(requestDto);
         userRepository.save(user);
-        return user.getId();
+
+        return ResponseEntity.ok(new SignupResponseDto(user.getId()));
 
 
 
