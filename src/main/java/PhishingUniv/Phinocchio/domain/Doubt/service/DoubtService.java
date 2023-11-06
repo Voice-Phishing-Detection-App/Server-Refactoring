@@ -180,24 +180,29 @@ public class DoubtService {
             addDoubt(doubtRequestDto, text, level);
         }
 
-        // 알람 설정 확인
-        SettingEntity settingEntity = settingRepository.findByUserId(userId)
-                .orElseThrow(() -> new SettingAppException(SettingErrorCode.SETTING_NOT_FOUND));
+//        // 알람 설정 확인
+//        SettingEntity settingEntity = settingRepository.findByUserId(userId)
+//                .orElseThrow(() -> new SettingAppException(SettingErrorCode.SETTING_NOT_FOUND));
+//
+//        // 보이스피싱 알람 설정 안 한 경우
+//        if(!settingEntity.getDetectAlram())
+//            return ResponseEntity.ok("not set detect alram");
+//
+//        // 긴급 연락처 알람 설정 한 경우
+//        if(settingEntity.getSosAlram() && level > 0) {
+//            sendSms(level);
+//        }
 
-        // 보이스피싱 알람 설정 안 한 경우
-        if(!settingEntity.getDetectAlram())
-            return ResponseEntity.ok("not set detect alram");
-
-        // 긴급 연락처 알람 설정 한 경우
-        if(settingEntity.getSosAlram() && level > 0) {
+        if(level > 0) {
+            // 긴급 연락처 알람 전송
             sendSms(level);
-        }
 
-        // 보이스피싱 알람 설정 한 경우: push 알람 보내기
-        String fcmToken = getFcmToken(ID);
-        String fcmMessageTitle = setFcmMessageTitle();
-        String fcmMessageBody = setFcmMessageBody(level);
-        sendFCMNotification(fcmToken, fcmMessageTitle, fcmMessageBody);
+            // 보이스피싱 알람 설정 한 경우: push 알람 보내기
+            String fcmToken = getFcmToken(ID);
+            String fcmMessageTitle = setFcmMessageTitle();
+            String fcmMessageBody = setFcmMessageBody(level);
+            sendFCMNotification(fcmToken, fcmMessageTitle, fcmMessageBody);
+        }
         return ResponseEntity.ok(mlResponseDto);
     }
 
