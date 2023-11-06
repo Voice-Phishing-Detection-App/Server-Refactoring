@@ -1,4 +1,4 @@
-package PhishingUniv.Phinocchio.util;
+package PhishingUniv.Phinocchio.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

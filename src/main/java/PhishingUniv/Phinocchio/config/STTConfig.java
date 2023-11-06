@@ -1,4 +1,4 @@
-package PhishingUniv.Phinocchio.domain.GoogleSTT.config;
+package PhishingUniv.Phinocchio.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import java.util.Objects;
