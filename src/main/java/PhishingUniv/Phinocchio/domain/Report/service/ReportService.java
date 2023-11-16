@@ -30,8 +30,7 @@ public class ReportService {
 
     //userId가져오기 위해서 임시로 만들어둔 것, 캐싱으로 나중에 수정해야하는 부분
     private final UserRepository userRepository;
-    public ReportEntity addReport(ReportDto reportDto)throws InvalidJwtException
-    {
+    public ReportEntity addReport(ReportDto reportDto) {
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity =userRepository.findById(ID).orElseThrow(
                 ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
@@ -70,11 +69,8 @@ public class ReportService {
                 .userId(userId).build();
 
 
-
-
         //doubt에 있는 report_id update해주어야함
         //doubtId
-
 
         return reportRepository.save(reportEntity);
     }
