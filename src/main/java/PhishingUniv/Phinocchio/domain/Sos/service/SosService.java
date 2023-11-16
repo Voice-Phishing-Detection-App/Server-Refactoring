@@ -89,8 +89,8 @@ public class SosService {
 
     }
 
-    public List<SosEntity> getSosListByLevel (int level) {
-        List<SosEntity> sosEntities = sosRepository.findByLevelGreaterThanEqual(level);
+    public List<SosEntity> getSosListByLevel (Long userId, int level) {
+        List<SosEntity> sosEntities = sosRepository.findByUserIdAndLevelGreaterThanEqual(userId, level);
         return sosEntities;
     }
 

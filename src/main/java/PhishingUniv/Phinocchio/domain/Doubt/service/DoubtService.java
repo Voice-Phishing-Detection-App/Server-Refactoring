@@ -142,13 +142,14 @@ public class DoubtService {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
         String userPhone = userEntity.getPhoneNumber();
+        Long userId = userEntity.getUserId();
         String smsMsg = "[피노키오] " + userPhone + " 번호로 보이스피싱이 감지되었습니다. <" + level +"단계>";
 
         MessageDTO messageDTO = MessageDTO.builder()
                 .content(smsMsg).build();
 
         // 메세지 보내기
-        List<SosEntity> sosEntities = sosService.getSosListByLevel(level);
+        List<SosEntity> sosEntities = sosService.getSosListByLevel(userId, level);
         for(SosEntity sosEntity : sosEntities) {
             messageDTO.setTo(sosEntity.getPhoneNumber());
             SmsResponseDTO smsResponseDTO = smsService.sendSms(messageDTO);
