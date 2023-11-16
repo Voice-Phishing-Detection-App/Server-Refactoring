@@ -37,7 +37,7 @@ public class STTService {
 
     private final UserRepository userRepository;
 
-    public ResponseEntity<?> handleGoogleSTTAPI(MultipartFile file)throws InvalidJwtException {
+    public ResponseEntity<?> handleGoogleSTTAPI(MultipartFile file) {
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
         userRepository.findById(ID).orElseThrow(
                 ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
@@ -48,7 +48,7 @@ public class STTService {
         return ResponseEntity.ok(new STTResponseDto(text));
     }
 
-    public String upload(MultipartFile file) throws STTAppException {
+    public String upload(MultipartFile file) {
         String fileName = AUDIO_FOLDER_PATH + file.getOriginalFilename();
         Path filePath = Paths.get(fileName);
 
@@ -74,7 +74,7 @@ public class STTService {
             Path path = Paths.get(fileName);
             byte[] data = Files.readAllBytes(path);
             ByteString audioBytes = ByteString.copyFrom(data);
-
+            System.out.println("path: "+path);
             // 오디오 파일 설정
             RecognitionConfig config =
                     RecognitionConfig.newBuilder()
