@@ -16,7 +16,7 @@ public class STTController {
 
     public final STTService sttService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> handleGoogleSTTAPI(@RequestParam("file") MultipartFile file) {
         return sttService.handleGoogleSTTAPI(file);
     }
