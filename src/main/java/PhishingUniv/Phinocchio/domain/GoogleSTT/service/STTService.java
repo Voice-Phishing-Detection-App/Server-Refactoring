@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class STTService {
     @Value("${AUDIO_FOLDER_PATH}")
-    private String AUDIO_FOLDER_PATH;
+    private  String AUDIO_FOLDER_PATH;
 
     private final UserRepository userRepository;
 

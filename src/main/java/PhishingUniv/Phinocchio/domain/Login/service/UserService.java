@@ -5,6 +5,7 @@ import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupResponseDto;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
 import PhishingUniv.Phinocchio.domain.Login.security.JwtGenerator;
+import PhishingUniv.Phinocchio.exception.ErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
@@ -56,49 +57,22 @@ public class UserService {
                 });
     }
 
-    public String login(LoginDto loginDto)
-    {
+    public String login(LoginDto loginDto) {
 
-        Authentication authentication = authenticationManager.authenticate(
+        UserEntity user = userRepository.findById(loginDto.getId())
+                .orElseThrow(() -> new LoginAppException((LoginErrorCode.USERNAME_NOT_FOUND)));
+        if (passwordEncoder.matches(loginDto.getPassword(),user.getPassword())) {
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginDto.getId(),
                             loginDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return jwtGenerator.generateToken(authentication);
-
-
-       // return ResponseEntity.ok().headers(httpHeaders).body(tokenDto);
-/*
-
-
-        Optional<UserEntity> found = userRepository.findById(loginDto.getId());
-        if(!found.isPresent())
-        {
-            throw new AppException(ErrorCode.USERNAME_NOT_FOUND,"찾을 수 없는 회원입니다.");
-
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return jwtGenerator.generateToken(authentication);
+        } else {
+            throw new LoginAppException(LoginErrorCode.INVALID_PASSWORD);
         }
-
-
-
-        if(!passwordEncoder.matches(found.get().getPassword(), loginDto.getPassword()))
-        {
-            throw new AppException(ErrorCode.INVALID_PASSWORD, "패스워드를 잘못 입력했습니다.");
-
-
-
-        }
-
-        //password 검증 과정 안 들어감 아직
-
-
-        else
-        {
-
-
-        }
-*/
     }
+
 
     public ResponseEntity<?> registerUser(SignupRequestDto requestDto)
     {
