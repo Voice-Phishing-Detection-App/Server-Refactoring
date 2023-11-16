@@ -97,6 +97,7 @@ public class STTService {
             }
             return text;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new STTAppException(STTErrorCode.LOCAL_TRANSLATION_ERROR);
         }
     }
