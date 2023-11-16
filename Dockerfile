@@ -1,8 +1,9 @@
 # jdk 11환경 구성
 FROM openjdk:11-jre-slim-buster
 
-# 패키지 업데이트 및 업그레이드 후 캐시 삭제
+# 패키지 업데이트 및 업그레이드, FFmpeg 설치 후 캐시 삭제
 RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y ffmpeg \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
