@@ -3,6 +3,8 @@ package PhishingUniv.Phinocchio.domain.Doubt.service;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
 import PhishingUniv.Phinocchio.domain.FCM.service.FCMNotificationService;
@@ -237,6 +239,10 @@ public class DoubtService {
         fcmMessage.append("\" 단계입니다.");
 
         return fcmMessage.toString();
+    }
+
+    public ResponseEntity<?> setMLServerUrl(MLServerRequestDto mlServerRequestDto) {
+        return mlService.setMLServerUrl(mlServerRequestDto.getUrl());
     }
 
 }

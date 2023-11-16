@@ -2,6 +2,7 @@ package PhishingUniv.Phinocchio.domain.Doubt.service;
 
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerResponseDto;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -10,10 +11,18 @@ import org.springframework.web.client.RestTemplate;
 public class MLService {
 
     private static RestTemplate restTemplate = null;
-    private static final String MLServerUrl = "https://ae52-165-229-125-226.ngrok-free.app/predict";
+    private static String MLServerUrl;
 
     public MLService() {
         this.restTemplate = new RestTemplate();
+    }
+
+    public ResponseEntity<?> setMLServerUrl(String url) {
+        MLServerUrl = url;
+
+        MLServerResponseDto mlServerResponseDto = new MLServerResponseDto();
+        mlServerResponseDto.setMlServer(MLServerUrl);
+        return ResponseEntity.ok(mlServerResponseDto);
     }
 
     public static MLResponseDto processText(MLRequestDto mlRequestDto) {
