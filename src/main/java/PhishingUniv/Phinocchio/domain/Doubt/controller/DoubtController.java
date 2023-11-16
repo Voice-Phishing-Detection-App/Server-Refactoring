@@ -1,6 +1,7 @@
 package PhishingUniv.Phinocchio.domain.Doubt.controller;
 
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,5 +33,11 @@ public class DoubtController {
     @GetMapping("/doubt/get")
     public List<DoubtEntity> getDoubtList(){
         return doubtService.getDoubtList();
+    }
+
+
+    @PostMapping("/doubt/set-ml-server")
+    public ResponseEntity<?> setMLServer(@RequestBody MLServerRequestDto mlServerRequestDto) {
+        return doubtService.setMLServerUrl(mlServerRequestDto);
     }
 }
