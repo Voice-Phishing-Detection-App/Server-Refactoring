@@ -14,7 +14,7 @@ public interface SosRepository extends JpaRepository<SosEntity, Long> {
 
     void delete(SosEntity sosEntity);
 
-    List<SosEntity> findByLevelGreaterThanEqual(int level);
+    List<SosEntity> findByUserIdAndLevelGreaterThanEqual(Long userId, int level);
 
     List<SosEntity> findByUserId(Long userId);
 

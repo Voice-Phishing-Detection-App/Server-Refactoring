@@ -1,8 +1,12 @@
 package PhishingUniv.Phinocchio.domain.Doubt.service;
 
+import PhishingUniv.Phinocchio.domain.Doubt.constant.DoubtLevel;
+import PhishingUniv.Phinocchio.domain.Doubt.constant.SMS;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
 import PhishingUniv.Phinocchio.domain.FCM.service.FCMNotificationService;
@@ -140,13 +144,14 @@ public class DoubtService {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
         String userPhone = userEntity.getPhoneNumber();
-        String smsMsg = "[피노키오] " + userPhone + " 번호로 보이스피싱이 감지되었습니다. <" + level +"단계>";
+        Long userId = userEntity.getUserId();
+        String smsMsg = SMS.SEND_SMS.getSmsContent(userPhone, getDoubtLevelName(level));
 
         MessageDTO messageDTO = MessageDTO.builder()
                 .content(smsMsg).build();
 
         // 메세지 보내기
-        List<SosEntity> sosEntities = sosService.getSosListByLevel(level);
+        List<SosEntity> sosEntities = sosService.getSosListByLevel(userId, level);
         for(SosEntity sosEntity : sosEntities) {
             messageDTO.setTo(sosEntity.getPhoneNumber());
             SmsResponseDTO smsResponseDTO = smsService.sendSms(messageDTO);
@@ -227,16 +232,24 @@ public class DoubtService {
     private String setFcmMessageBody(int level) {
         StringBuilder fcmMessage = new StringBuilder();
         fcmMessage.append("보이스피싱 \"");
-        if(level == 1) {
-            fcmMessage.append("의심");
-        } else if(level == 2) {
-            fcmMessage.append("경고");
-        } else if(level == 3) {
-            fcmMessage.append("위험");
-        }
+        fcmMessage.append(getDoubtLevelName(level));
         fcmMessage.append("\" 단계입니다.");
 
         return fcmMessage.toString();
+    }
+
+
+    private String getDoubtLevelName(int level) {
+        for(DoubtLevel doubtLevel : DoubtLevel.values()) {
+            if(level == doubtLevel.getLevel()) {
+                return doubtLevel.getLevelName();
+            }
+        }
+        return null;
+    }
+
+    public ResponseEntity<?> setMLServerUrl(MLServerRequestDto mlServerRequestDto) {
+        return mlService.setMLServerUrl(mlServerRequestDto.getUrl());
     }
 
 }
