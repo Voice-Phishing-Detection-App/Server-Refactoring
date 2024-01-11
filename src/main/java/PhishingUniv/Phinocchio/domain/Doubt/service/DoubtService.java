@@ -99,10 +99,7 @@ public class DoubtService {
         UserEntity userEntity = userRepository.findById(ID).orElseThrow(
                 ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
-        Long userId = userEntity.getUserId();
-        List<DoubtEntity> doubtEntities = doubtRepository.findDoubtEntitiesByUserId(userId);
-
-        return doubtEntities;
+        return userEntity.getDoubtList();
 
     }
     private void addDoubt(DoubtRequestDto doubtRequestDto, String text, int level) throws InvalidJwtException, DoubtAppException, VoiceAppException {
@@ -125,7 +122,7 @@ public class DoubtService {
         DoubtEntity doubtEntity = new DoubtEntity();
         doubtEntity.setPhoneNumber(doubtRequestDto.getPhoneNumber());
         doubtEntity.setLevel(level);
-        doubtEntity.setUserId(userId);
+        doubtEntity.setUser(userEntity);
         doubtEntity.setTitle(getCurrentTime());
         doubtEntity.setVoice_id(savedVoiceEntity.getVoiceId());
         DoubtEntity savedDoubtEntity = doubtRepository.save(doubtEntity);

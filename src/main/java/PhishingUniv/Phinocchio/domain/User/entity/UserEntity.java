@@ -2,7 +2,9 @@ package PhishingUniv.Phinocchio.domain.User.entity;
 
 
 
+import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
+import java.util.List;
 import javax.persistence.*;
 
 import PhishingUniv.Phinocchio.domain.Sos.entity.SosEntity;
@@ -41,6 +43,9 @@ public class UserEntity extends Timestamp{
     @Column(name = "fcm_token", nullable = false)
     private String fcmToken;
 
+    @OneToMany(mappedBy = "user")
+    private List<DoubtEntity> doubtList;
+    
     @OneToMany(mappedBy = "user")
     List<SosEntity> sosList = new ArrayList<>();
 
