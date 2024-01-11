@@ -7,7 +7,11 @@ import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
 import java.util.List;
 import javax.persistence.*;
 
+import PhishingUniv.Phinocchio.domain.Sos.entity.SosEntity;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -41,6 +45,9 @@ public class UserEntity extends Timestamp{
 
     @OneToMany(mappedBy = "user")
     private List<DoubtEntity> doubtList;
+    
+    @OneToMany(mappedBy = "user")
+    List<SosEntity> sosList = new ArrayList<>();
 
     /*@Column(name = "registration_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)

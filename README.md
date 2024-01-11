@@ -1,11 +1,11 @@
 # Phinochio
 >**🔍 Spring-boot를 이용한 안드로이드용 보이스피싱 탐지 앱**
 >
->**프로젝트 기간 : 2023.05.01(월) ~ 진행중 !!**
+>**프로젝트 기간 : 2023.05.01(월) ~ 2023.11.17(금)**
 <br>
 
-## 🌠 보이스피싱 탐지 흐름
-<image  width=600 src=https://github.com/heymin2/Voice-Phishing-Detection-App/assets/97522726/48010109-2f74-4d33-87eb-02de74e23c6e>
+## 🌠 아키텍처
+<image  width=600 src=https://github.com/Voice-Phishing-Detection-App/Server/assets/97522726/8a06834d-1f9f-49be-8c47-c88c3a62d367>
 
 
 
@@ -36,7 +36,8 @@
 
 
 ### 📑 문서 
-- [발표자료](https://github.com/heymin2/Voice-Phishing-Detection-App/files/11901194/_._.1.pdf)
+- [발표자료_1](https://github.com/heymin2/Voice-Phishing-Detection-App/files/11901194/_._.1.pdf)
+- [발표자료_2](https://github.com/Voice-Phishing-Detection-App/Server/files/13406959/default.pptx)
 - [피그마](https://www.figma.com/file/8RuHW7hZWDgdeX7cKI2U0Q/2023%EB%85%84%EB%8F%84-%EC%A2%85%ED%95%A9%EC%84%A4%EA%B3%84%EA%B3%BC%EC%A0%9C_%EB%B3%B4%EC%9D%B4%EC%8A%A4%ED%94%BC%EC%8B%B1?type=design&node-id=0-1&mode=design&t=8KdYkAZOAYETqHtz-0)
 
 
