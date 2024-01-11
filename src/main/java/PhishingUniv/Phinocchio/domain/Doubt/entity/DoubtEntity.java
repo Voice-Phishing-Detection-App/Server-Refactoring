@@ -25,7 +25,7 @@ public class DoubtEntity extends Timestamp {
     private int level;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @JsonIgnoreProperties({"doubtList"})
     private UserEntity user;
 
