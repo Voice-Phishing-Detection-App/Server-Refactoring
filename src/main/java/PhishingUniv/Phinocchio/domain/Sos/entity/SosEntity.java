@@ -1,5 +1,7 @@
 package PhishingUniv.Phinocchio.domain.Sos.entity;
 
+import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +18,10 @@ public class SosEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sosId;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JsonIgnoreProperties({"sosList"})
+    private UserEntity user;
 
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
