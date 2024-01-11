@@ -38,27 +38,26 @@ public class SosService {
         return modelMapper.map(sosUpdateDto, SosEntity.class);
     }
 
-    public ResponseEntity sosList() throws LoginAppException{
+    public List<SosEntity> sosList() throws LoginAppException{
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
-        Long userId = userEntity.getUserId();
+        List<SosEntity> sosList = userEntity.getSosList();
 
-        return ResponseEntity.ok(sosRepository.findByUserId(userId));
+        return sosList;
     }
 
-    public ResponseEntity addSos(SosDto sosDto) throws LoginAppException{
+    public ResponseEntity<?> addSos(SosDto sosDto) throws LoginAppException{
         SosEntity sosEntity = convertToEntity(sosDto);
 
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
-        Long userId = userEntity.getUserId();
 
-        sosEntity.setUserId(userId);
+        sosEntity.setUser(userEntity);
 
         sosRepository.save(sosEntity);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity updateSos(SosUpdateDto sosUpdateDto) throws SosAppException, LoginAppException{
@@ -70,12 +69,11 @@ public class SosService {
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
-        Long userId = userEntity.getUserId();
 
-        sosEntity.setUserId(userId);
+        sosEntity.setUser(userEntity);
         sosRepository.save(sosEntity);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -85,7 +83,7 @@ public class SosService {
 
         sosRepository.delete(sosEntity);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
