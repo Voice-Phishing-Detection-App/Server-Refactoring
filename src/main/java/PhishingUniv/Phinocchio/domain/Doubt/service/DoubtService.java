@@ -124,7 +124,7 @@ public class DoubtService {
         doubtEntity.setLevel(level);
         doubtEntity.setUser(userEntity);
         doubtEntity.setTitle(getCurrentTime());
-        doubtEntity.setVoice_id(savedVoiceEntity.getVoiceId());
+        doubtEntity.setVoice(savedVoiceEntity);
         DoubtEntity savedDoubtEntity = doubtRepository.save(doubtEntity);
         System.out.println(savedDoubtEntity);
         if(savedDoubtEntity == null) {
