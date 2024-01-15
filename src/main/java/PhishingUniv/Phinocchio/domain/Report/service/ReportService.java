@@ -4,7 +4,6 @@ package PhishingUniv.Phinocchio.domain.Report.service;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
-import PhishingUniv.Phinocchio.domain.Login.security.UserDetailsImpl;
 import PhishingUniv.Phinocchio.domain.Report.dto.ReportDto;
 import PhishingUniv.Phinocchio.domain.Report.dto.ReportWithoutDoubtDto;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
@@ -15,11 +14,9 @@ import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,10 +32,9 @@ public class ReportService {
         UserEntity userEntity =userRepository.findById(ID).orElseThrow(
                 ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
-        Long userId = userEntity.getUserId();
 
         ReportEntity reportEntity = new ReportEntity(reportDto.getType(), reportDto.getTitle(), reportDto.getContent()
-                                                ,reportDto.getPhoneNumber(),userId,reportDto.getVoiceId());
+                                                ,reportDto.getPhoneNumber(),userEntity,reportDto.getVoiceId());
 
         reportRepository.save(reportEntity);
 
@@ -56,14 +52,12 @@ public class ReportService {
         UserEntity userEntity =userRepository.findById(ID).orElseThrow(
                 ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
-        Long userId = userEntity.getUserId();
-
         ReportEntity reportEntity = ReportEntity.builder()
                 .type(reportDto.getType())
                 .title(reportDto.getTitle())
                 .content(reportDto.getContent())
                 .phoneNumber(reportDto.getPhoneNumber())
-                .userId(userId).build();
+                .user(userEntity).build();
 
         return reportRepository.save(reportEntity);
     }
@@ -74,8 +68,7 @@ public class ReportService {
         UserEntity userEntity =userRepository.findById(ID).orElseThrow(
                 ()->new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
 
-        Long userId = userEntity.getUserId();
-        List<ReportEntity> reportEntities = reportRepository.findReportEntitiesByUserId(userId);
+        List<ReportEntity> reportEntities = reportRepository.findReportEntitiesByUser(userEntity);
 
         return reportEntities;
 
