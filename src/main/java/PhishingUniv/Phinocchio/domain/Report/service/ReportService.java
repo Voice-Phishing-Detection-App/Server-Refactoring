@@ -28,7 +28,7 @@ public class ReportService {
     private final DoubtRepository doubtRepository;
     private final ReportRepository reportRepository;
 
-    //userId가져오기 위해서 임시로 만들어둔 것, 캐싱으로 나중에 수정해야하는 부분
+    //userId 가져오기 위해서 임시로 만들어둔 것, 캐싱으로 나중에 수정해야하는 부분
     private final UserRepository userRepository;
     public ReportEntity addReport(ReportDto reportDto) {
         String ID = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -40,15 +40,12 @@ public class ReportService {
         ReportEntity reportEntity = new ReportEntity(reportDto.getType(), reportDto.getTitle(), reportDto.getContent()
                                                 ,reportDto.getPhoneNumber(),userId,reportDto.getVoiceId());
 
-        Long reportId = reportRepository.save(reportEntity).getReportId();
+        reportRepository.save(reportEntity);
 
         DoubtEntity doubtEntity = doubtRepository.findById(reportDto.getDoubtId()).orElseThrow(() -> new DoubtAppException(
                 DoubtErrorCode.DOUBT_NOT_FOUND));
-        doubtEntity.setReport_id(reportId);
+        doubtEntity.setReport(reportEntity);
         doubtRepository.save(doubtEntity);
-        //doubt에 있는 report_id update해주어야함
-        //doubtId
-
 
         return reportEntity;
     }
@@ -67,10 +64,6 @@ public class ReportService {
                 .content(reportDto.getContent())
                 .phoneNumber(reportDto.getPhoneNumber())
                 .userId(userId).build();
-
-
-        //doubt에 있는 report_id update해주어야함
-        //doubtId
 
         return reportRepository.save(reportEntity);
     }
