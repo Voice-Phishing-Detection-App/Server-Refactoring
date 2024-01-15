@@ -1,5 +1,8 @@
 package PhishingUniv.Phinocchio.domain.Report.entity;
 
+import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,19 +35,21 @@ public class ReportEntity extends Timestamp {
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JsonIgnoreProperties({"sosList"})
+    private UserEntity user;
 
     @Column(name = "voice_id")
     private Long voiceId;
 
-    public ReportEntity(ReportType reportType, String title, String content, String phoneNumber, Long userId, Long voiceId)
+    public ReportEntity(ReportType reportType, String title, String content, String phoneNumber, UserEntity user, Long voiceId)
     {
         this.title = title;
         this.type = reportType;
         this.content = content;
         this.phoneNumber = phoneNumber;
-        this.userId = userId;
+        this.user = user;
         this.voiceId = voiceId;
     }
 }
