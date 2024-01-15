@@ -2,6 +2,7 @@ package PhishingUniv.Phinocchio.domain.Doubt.entity;
 
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
+import PhishingUniv.Phinocchio.domain.Voice.entity.VoiceEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,9 +34,9 @@ public class DoubtEntity extends Timestamp {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "voiceId", nullable = false)
-    private Long voice_id;
-
+    @OneToOne
+    @JoinColumn(name="voice_id")
+    private VoiceEntity voice;
 
     @OneToOne
     @JoinColumn(name="report_id")
