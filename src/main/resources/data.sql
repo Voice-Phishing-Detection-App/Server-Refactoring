@@ -4,17 +4,17 @@ INSERT INTO "user" (name, id, password, phone_number, fcm_token) VALUES ('안수
 
 INSERT INTO setting (user_id, alram, detect_alram, sos_alram, sos_level) VALUES (1, 1, 1, 1, 1);
 
-INSERT INTO doubt (registration_date, level, phone_number, report_id, title, user_id, voice_id) VALUES ('2023-06-21 16:50:40.700945', 2, '01000000000', 1, '6월 21일 의심내역', 1, 1);
-INSERT INTO doubt (registration_date, level, phone_number, report_id, title, user_id, voice_id) VALUES ('2023-06-20 13:40:40.700945', 3, '01000000001', 2, '6월 20일 의심내역', 1, 1);
-INSERT INTO doubt (registration_date, level, phone_number, report_id, title, user_id, voice_id) VALUES ('2023-06-18 19:03:40.700945	', 1, '01000000000', 3, '6월 18일 의심내역', 2, 1);
-INSERT INTO doubt (registration_date, level, phone_number, report_id, title, user_id, voice_id) VALUES ('2023-06-21 15:27:40.700945', 2, '01000000001', 4, '6월 21일 의심내역', 2, 1);
+-- INSERT INTO doubt (registration_date, level, phone_number, report_id, title, user_id, voice_id) VALUES ('2023-06-21 16:50:40.700945', 2, '01000000000', 1, '6월 21일 의심내역', 1, 1);
+-- INSERT INTO doubt (registration_date, level, phone_number, report_id, title, user_id, voice_id) VALUES ('2023-06-20 13:40:40.700945', 3, '01000000001', 2, '6월 20일 의심내역', 1, 1);
+-- INSERT INTO doubt (registration_date, level, phone_number, report_id, title, user_id, voice_id) VALUES ('2023-06-18 19:03:40.700945	', 1, '01000000000', 3, '6월 18일 의심내역', 2, 1);
+-- INSERT INTO doubt (registration_date, level, phone_number, report_id, title, user_id, voice_id) VALUES ('2023-06-21 15:27:40.700945', 2, '01000000001', 4, '6월 21일 의심내역', 2, 1);
 
 
-INSERT INTO report (type, title ,content, phone_number, registration_date, user_id, voice_id) VALUES ('REPORT_TYPE_FRAUD','6월 21일 의심내역', '국민 은행에서 사기 전화','01000000000', '2023-06-21 16:50:40.700945',1, 1);
-INSERT INTO report (type,title, content, phone_number, registration_date, user_id, voice_id) VALUES ('REPORT_TYPE_IMPERSONATING','6월 20일 의심내역', '검찰청을 사칭해서 개인정보 빼돌리려는 전화였어요','01000000001', '2023-06-20 13:40:40.700945', 1, 2);
+-- INSERT INTO report (type, title ,content, phone_number, registration_date, user_id, voice_id) VALUES ('REPORT_TYPE_FRAUD','6월 21일 의심내역', '국민 은행에서 사기 전화','01000000000', '2023-06-21 16:50:40.700945',1, 1);
+-- INSERT INTO report (type,title, content, phone_number, registration_date, user_id, voice_id) VALUES ('REPORT_TYPE_IMPERSONATING','6월 20일 의심내역', '검찰청을 사칭해서 개인정보 빼돌리려는 전화였어요','01000000001', '2023-06-20 13:40:40.700945', 1, 2);
 
-INSERT INTO report (type,title ,content, phone_number, registration_date, user_id, voice_id) VALUES ('REPORT_TYPE_FRAUD','6월 18일 의심내역', '대구은행에서 걸려온 사기 전화','01000000000', '2023-06-18 19:03:40.700945', 2, 3);
-INSERT INTO report (type,title, content, phone_number, registration_date, user_id, voice_id) VALUES ('REPORT_TYPE_INDUCE','6월 21일 의심내역', '국민 은행에서 사기 전화','01000000001', '2023-06-21 15:27:40.700945', 2, 4);
+-- INSERT INTO report (type,title ,content, phone_number, registration_date, user_id, voice_id) VALUES ('REPORT_TYPE_FRAUD','6월 18일 의심내역', '대구은행에서 걸려온 사기 전화','01000000000', '2023-06-18 19:03:40.700945', 2, 3);
+-- INSERT INTO report (type,title, content, phone_number, registration_date, user_id, voice_id) VALUES ('REPORT_TYPE_INDUCE','6월 21일 의심내역', '국민 은행에서 사기 전화','01000000001', '2023-06-21 15:27:40.700945', 2, 4);
 
 INSERT INTO sos (user_id, phone_number, relation, level) VALUES  (1, '01043213042', '가족', 3);
 INSERT INTO sos (user_id, phone_number, relation, level) VALUES  (1, '01072507099', '친구', 2);
