@@ -1,7 +1,7 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.6'
-	id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'org.springframework.boot' version '2.7.6'
+    id 'io.spring.dependency-management' version '1.1.0'
 
 }
 
@@ -10,65 +10,62 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+    //swagger
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+    // google stt api
+    implementation 'com.google.cloud:google-cloud-speech:4.22.0'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
 
 
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+    // mysql
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-	//swagger
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-
-	// google stt api
-	implementation 'com.google.cloud:google-cloud-speech:4.22.0'
-	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
-	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
-
-
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation group: 'org.springframework.security', name: 'spring-security-test'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.modelmapper:modelmapper:2.4.2'
 
 
-
-	implementation 'org.modelmapper:modelmapper:2.4.2'
-
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
 
-	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    // twilio
+    implementation group: 'com.twilio.sdk', name: 'twilio', version: '10.0.0-rc.4'
+    compileOnly group: "com.twilio.sdk", name: "twilio", version: "8.0.+"
+    compileOnly group: "com.sparkjava", name: "spark-core", version: "2.7.1"
 
 
-	// twilio
-	implementation group: 'com.twilio.sdk', name: 'twilio', version: '10.0.0-rc.4'
-	compileOnly group: "com.twilio.sdk", name: "twilio", version: "8.0.+"
-	compileOnly group: "com.sparkjava", name: "spark-core", version: "2.7.1"
-
-
-
-	// fcm
-	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '6.8.1'
+    // fcm
+    implementation group: 'com.google.firebase', name: 'firebase-admin', version: '6.8.1'
 
 
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
