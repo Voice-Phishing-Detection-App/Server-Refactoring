@@ -57,13 +57,8 @@ public class DoubtControllerTest {
   @Test
   void doubtSuccess() throws Exception {
     // stub
-    DoubtRequestDto doubtRequestDto = new DoubtRequestDto();
-    doubtRequestDto.setPhoneNumber("01012341234");
-    doubtRequestDto.setText("안녕하십니까 서울중앙지방검찰청 김피싱 검사입니다 현재 김피해님의 통장이 범죄에 연루되어 있어 검찰청으로 출석해주셔야 합니다");
-
-    MLResponseDto mlResponseDto = new MLResponseDto();
-    mlResponseDto.setLevel(2);
-    mlResponseDto.setPhishing(true);
+    DoubtRequestDto doubtRequestDto = doubtRequestDto();
+    MLResponseDto mlResponseDto = mlResponseDto();
 
     // given
     given(doubtService.doubt(any(DoubtRequestDto.class))).willReturn(mlResponseDto);
@@ -89,10 +84,7 @@ public class DoubtControllerTest {
   @Test
   void doubtFail_JwtToken() throws Exception {
     // stub
-    DoubtRequestDto doubtRequestDto = new DoubtRequestDto();
-    doubtRequestDto.setPhoneNumber("01012341234");
-    doubtRequestDto.setText("안녕하십니까 서울중앙지방검찰청 김피싱 검사입니다 현재 김피해님의 통장이 범죄에 연루되어 있어 검찰청으로 출석해주셔야 합니다");
-
+    DoubtRequestDto doubtRequestDto = doubtRequestDto();
     LoginAppException loginAppException = new LoginAppException(LoginErrorCode.JWT_USER_NOT_FOUND);
 
     // given
@@ -109,6 +101,20 @@ public class DoubtControllerTest {
         .andDo(print());
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
+  }
+
+  private DoubtRequestDto doubtRequestDto() {
+    DoubtRequestDto doubtRequestDto = new DoubtRequestDto();
+    doubtRequestDto.setPhoneNumber("01012341234");
+    doubtRequestDto.setText("안녕하십니까 서울중앙지방검찰청 김피싱 검사입니다 현재 김피해님의 통장이 범죄에 연루되어 있어 검찰청으로 출석해주셔야 합니다");
+    return doubtRequestDto;
+  }
+
+  private MLResponseDto mlResponseDto() {
+    MLResponseDto mlResponseDto = new MLResponseDto();
+    mlResponseDto.setLevel(2);
+    mlResponseDto.setPhishing(true);
+    return mlResponseDto;
   }
 
 }
