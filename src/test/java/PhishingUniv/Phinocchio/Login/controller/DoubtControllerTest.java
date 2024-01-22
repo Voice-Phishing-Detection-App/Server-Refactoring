@@ -19,6 +19,8 @@ import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
 import PhishingUniv.Phinocchio.exception.FCM.FCMErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
+import PhishingUniv.Phinocchio.exception.Sos.SosAppException;
+import PhishingUniv.Phinocchio.exception.Sos.SosErrorCode;
 import PhishingUniv.Phinocchio.exception.Voice.VoiceAppException;
 import PhishingUniv.Phinocchio.exception.Voice.VoiceErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -217,6 +219,33 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").value("FCM_ERROR"))
         .andExpect(jsonPath("$.message").exists())
         .andExpect(jsonPath("$.message").value("FCM 관련 오류입니다."))
+        .andDo(print());
+
+    verify(doubtService).doubt(refEq(doubtRequestDto));
+  }
+
+  @DisplayName("보이스피싱 의심 여부 판단 - 실패 (긴급연락처로 SMS 문자 전송 문제)")
+  @Test
+  void doubtFail_SMS() throws Exception {
+    // stub
+    DoubtRequestDto doubtRequestDto = doubtRequestDto();
+    SosAppException sosAppException = new SosAppException(SosErrorCode.FAILED_TO_SEND_SMS);
+
+    // given
+    given(doubtService.doubt(any(DoubtRequestDto.class))).willThrow(sosAppException);
+
+    // when
+    ResultActions result = mockMvc.perform(post("/doubt")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(doubtRequestDto)));
+
+    // then
+    result
+        .andExpect(status().isInternalServerError())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("FAILED_TO_SEND_SMS"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("메세지 전송 실패"))
         .andDo(print());
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
