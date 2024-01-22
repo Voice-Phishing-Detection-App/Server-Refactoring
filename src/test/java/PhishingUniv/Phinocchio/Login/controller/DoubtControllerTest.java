@@ -15,6 +15,8 @@ import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
+import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
+import PhishingUniv.Phinocchio.exception.FCM.FCMErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.exception.Voice.VoiceAppException;
@@ -188,6 +190,33 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").value("FAILED_TO_SAVE"))
         .andExpect(jsonPath("$.message").exists())
         .andExpect(jsonPath("$.message").value("목소리 저장에 실패하였습니다."))
+        .andDo(print());
+
+    verify(doubtService).doubt(refEq(doubtRequestDto));
+  }
+
+  @DisplayName("보이스피싱 의심 여부 판단 - 실패 (FCM push 문제)")
+  @Test
+  void doubtFail_FCM() throws Exception {
+    // stub
+    DoubtRequestDto doubtRequestDto = doubtRequestDto();
+    FCMAppException fcmAppException = new FCMAppException(FCMErrorCode.FCM_ERROR);
+
+    // given
+    given(doubtService.doubt(any(DoubtRequestDto.class))).willThrow(fcmAppException);
+
+    // when
+    ResultActions result = mockMvc.perform(post("/doubt")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(doubtRequestDto)));
+
+    // then
+    result
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("FCM_ERROR"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("FCM 관련 오류입니다."))
         .andDo(print());
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
