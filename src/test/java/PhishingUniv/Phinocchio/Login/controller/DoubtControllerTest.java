@@ -17,6 +17,8 @@ import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
+import PhishingUniv.Phinocchio.exception.Voice.VoiceAppException;
+import PhishingUniv.Phinocchio.exception.Voice.VoiceErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -159,6 +161,33 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").value("FAILED_TO_SAVE"))
         .andExpect(jsonPath("$.message").exists())
         .andExpect(jsonPath("$.message").value("의심내역 저장에 실패하였습니다."))
+        .andDo(print());
+
+    verify(doubtService).doubt(refEq(doubtRequestDto));
+  }
+
+  @DisplayName("보이스피싱 의심 여부 판단 - 실패 (목소리 저장 문제)")
+  @Test
+  void doubtFail_SaveVoice() throws Exception {
+    // stub
+    DoubtRequestDto doubtRequestDto = doubtRequestDto();
+    VoiceAppException voiceAppException = new VoiceAppException(VoiceErrorCode.FAILED_TO_SAVE);
+
+    // given
+    given(doubtService.doubt(any(DoubtRequestDto.class))).willThrow(voiceAppException);
+
+    // when
+    ResultActions result = mockMvc.perform(post("/doubt")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(doubtRequestDto)));
+
+    // then
+    result
+        .andExpect(status().isInternalServerError())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("FAILED_TO_SAVE"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("목소리 저장에 실패하였습니다."))
         .andDo(print());
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
