@@ -8,6 +8,8 @@ import PhishingUniv.Phinocchio.domain.Login.security.JwtAuthEntryPoint;
 import PhishingUniv.Phinocchio.domain.Login.security.JwtGenerator;
 import PhishingUniv.Phinocchio.domain.Login.security.SecurityConfig;
 import PhishingUniv.Phinocchio.domain.Login.service.UserService;
+import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
+import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -113,6 +115,36 @@ class UserControllerTest {
       result
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.token").exists())
+          .andDo(print());
+  }
+
+  @Test
+  @DisplayName("로그인 실패 - 올바르지 않은 사용자 id 입력")
+  void login_fail_username() throws Exception {
+
+      // stub
+      LoginDto loginDto = new LoginDto();
+      loginDto.setId("love");
+      loginDto.setPassword("iloveyou");
+
+      // given
+      given(userService.login(any(LoginDto.class)))
+        .willThrow(new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
+
+      // when
+      ResultActions result = mockMvc.perform(
+            post("/login")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(loginDto)));
+
+      // result
+      result
+          .andExpect(status().isNotFound())
+          .andExpect(jsonPath("$.error").exists())
+          .andExpect(jsonPath("$.error").value("USERNAME_NOT_FOUND"))
+          .andExpect(jsonPath("$.message").exists())
+          .andExpect(jsonPath("$.message").value("사용자를 불러올 수 없습니다."))
           .andDo(print());
   }
 
