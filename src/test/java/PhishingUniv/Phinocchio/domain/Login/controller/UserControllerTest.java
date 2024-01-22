@@ -178,6 +178,41 @@ class UserControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @DisplayName("회원가입 실패 - 사용자 id 중복")
+  void signup_fail_userId() throws Exception {
+
+    // stub
+    SignupRequestDto requestDto = new SignupRequestDto();
+    requestDto.setId("userId3");
+    requestDto.setName("userName4");
+    requestDto.setPassword("password4");
+    requestDto.setPhoneNumber("01044440000");
+    requestDto.setFcmToken("fcmToken4");
+
+    // given
+    given(userService.registerUser(any(SignupRequestDto.class)))
+        .willThrow(new LoginAppException(LoginErrorCode.USERNAME_DUPLICATED));
+
+    // when
+    ResultActions result = mockMvc.perform(
+        post("/signup")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsBytes(requestDto)));
+
+    // result
+    result
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("USERNAME_DUPLICATED"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("이미 존재하는 아이디입니다."))
+        .andDo(print());
+  }
+
+
+
     @Test
     void login() {
     }
