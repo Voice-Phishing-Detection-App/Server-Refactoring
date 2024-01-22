@@ -148,6 +148,36 @@ class UserControllerTest {
           .andDo(print());
   }
 
+  @Test
+  @DisplayName("로그인 실패 - 올바르지 않은 패스워드 입력")
+  void login_fail_password() throws Exception {
+
+    // stub
+    LoginDto loginDto = new LoginDto();
+    loginDto.setId("userId3");
+    loginDto.setPassword("iloveyou");
+
+    // given
+    given(userService.login(any(LoginDto.class)))
+        .willThrow(new LoginAppException(LoginErrorCode.INVALID_PASSWORD));
+
+    // when
+    ResultActions result = mockMvc.perform(
+        post("/login")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsBytes(loginDto)));
+
+    // result
+    result
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("INVALID_PASSWORD"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("틀린 비밀번호 입니다."))
+        .andDo(print());
+  }
+
     @Test
     void login() {
     }
