@@ -13,6 +13,8 @@ import PhishingUniv.Phinocchio.domain.Doubt.controller.DoubtController;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
+import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
+import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -98,6 +100,65 @@ public class DoubtControllerTest {
     // then
     result
         .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("JWT_USER_NOT_FOUND"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("로그인 중인 사용자 정보 찾을 수 없습니다."))
+        .andDo(print());
+
+    verify(doubtService).doubt(refEq(doubtRequestDto));
+  }
+
+  @DisplayName("보이스피싱 의심 여부 판단 - 실패 (머신러닝 서버와 통신 문제)")
+  @Test
+  void doubtFail_DisconnectedToMlServer() throws Exception {
+    // stub
+    DoubtRequestDto doubtRequestDto = doubtRequestDto();
+    DoubtAppException doubtAppException = new DoubtAppException(
+        DoubtErrorCode.DISCONNCECTED_TO_MLSERVER);
+
+    // given
+    given(doubtService.doubt(any(DoubtRequestDto.class))).willThrow(doubtAppException);
+
+    // when
+    ResultActions result = mockMvc.perform(post("/doubt")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(doubtRequestDto)));
+
+    // then
+    result
+        .andExpect(status().isInternalServerError())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("DISCONNCECTED_TO_MLSERVER"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("머신러닝 서버와 연결이 되지 않습니다."))
+        .andDo(print());
+
+    verify(doubtService).doubt(refEq(doubtRequestDto));
+  }
+
+  @DisplayName("보이스피싱 의심 여부 판단 - 실패 (의심내역 저장 문제)")
+  @Test
+  void doubtFail_SaveDoubt() throws Exception {
+    // stub
+    DoubtRequestDto doubtRequestDto = doubtRequestDto();
+    DoubtAppException doubtAppException = new DoubtAppException(DoubtErrorCode.FAILED_TO_SAVE);
+
+    // given
+    given(doubtService.doubt(any(DoubtRequestDto.class))).willThrow(doubtAppException);
+
+    // when
+    ResultActions result = mockMvc.perform(post("/doubt")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(doubtRequestDto)));
+
+    // then
+    result
+        .andExpect(status().isInternalServerError())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("FAILED_TO_SAVE"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("의심내역 저장에 실패하였습니다."))
         .andDo(print());
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
