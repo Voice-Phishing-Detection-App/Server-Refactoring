@@ -1,5 +1,6 @@
 package PhishingUniv.Phinocchio.domain.Login.controller;
 
+import PhishingUniv.Phinocchio.domain.Login.dto.LoginDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupRequestDto;
 import PhishingUniv.Phinocchio.domain.Login.dto.SignupResponseDto;
 import PhishingUniv.Phinocchio.domain.Login.security.CustomUserDetailsService;
@@ -87,6 +88,33 @@ class UserControllerTest {
             .andExpect(jsonPath("$.id").value("userId3"))
             .andDo(print());
     }
+
+
+  @Test
+  @DisplayName("로그인 성공")
+  void login_success() throws Exception {
+      // stub
+      LoginDto loginDto = new LoginDto();
+      loginDto.setId("userId3");
+      loginDto.setPassword("password3");
+
+      // given
+      given(userService.login(any(LoginDto.class)))
+        .willReturn("token");
+
+      // when
+      ResultActions result = mockMvc.perform(
+            post("/login")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(loginDto)));
+
+      // then
+      result
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.token").exists())
+          .andDo(print());
+  }
 
     @Test
     void login() {
