@@ -211,6 +211,38 @@ class UserControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @DisplayName("회원가입 실패 - 전화번호 중복")
+  void signup_fail_phoneNumber() throws Exception {
+
+    // stub
+    SignupRequestDto requestDto = new SignupRequestDto();
+    requestDto.setId("userId4");
+    requestDto.setName("userName4");
+    requestDto.setPassword("password4");
+    requestDto.setPhoneNumber("01033330000");
+    requestDto.setFcmToken("fcmToken4");
+
+    // given
+    given(userService.registerUser(any(SignupRequestDto.class)))
+        .willThrow(new LoginAppException(LoginErrorCode.PHONENUMBER_DUPLICATED));
+
+    // when
+    ResultActions result = mockMvc.perform(
+        post("/signup")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsBytes(requestDto)));
+
+    // result
+    result
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("PHONENUMBER_DUPLICATED"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("이미 사용중인 전화번호입니다."))
+        .andDo(print());
+  }
 
 
     @Test
