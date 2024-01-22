@@ -244,6 +244,38 @@ class UserControllerTest {
         .andDo(print());
   }
 
+  @Test
+  @DisplayName("회원가입 실패 - 디바이스 중복")
+  void signup_fail_device() throws Exception {
+
+    // stub
+    SignupRequestDto requestDto = new SignupRequestDto();
+    requestDto.setId("userId4");
+    requestDto.setName("userName4");
+    requestDto.setPassword("password4");
+    requestDto.setPhoneNumber("01044440000");
+    requestDto.setFcmToken("fcmToken3");
+
+    // given
+    given(userService.registerUser(any(SignupRequestDto.class)))
+        .willThrow(new LoginAppException(LoginErrorCode.DEVICE_DUPLICATED));
+
+    // when
+    ResultActions result = mockMvc.perform(
+        post("/signup")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsBytes(requestDto)));
+
+    // result
+    result
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("DEVICE_DUPLICATED"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("해당 기기에서 사용중인 계정이 존재합니다."))
+        .andDo(print());
+  }
 
     @Test
     void login() {
