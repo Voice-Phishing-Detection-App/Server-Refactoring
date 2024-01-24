@@ -105,6 +105,34 @@ public class UserServiceTest {
     verify(jwtGenerator, times(1)).generateToken(authentication);
   }
 
+  @Test
+  @DisplayName("로그인 실패 - 비밀번호 불일치")
+  void login_failure_invalidPassword() {
+    // given
+
+    LoginDto loginDto = loginDto();
+
+    SignupRequestDto userDto = signupRequestDto();
+
+    UserEntity userEntity = new UserEntity(userDto);
+
+
+    when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
+    when(passwordEncoder.matches(password, userDto.getPassword())).thenReturn(false);
+
+    // given
+
+    assertThrows(LoginAppException.class, () -> userService.login(loginDto),
+        LoginErrorCode.INVALID_PASSWORD.getMessage());
+
+    // verify
+    verify(userRepository, times(1)).findById(userId);
+    verify(passwordEncoder, times(1)).matches(password, userDto.getPassword());
+    verify(authenticationManager, times(0)).authenticate(any());
+    verify(jwtGenerator, times(0)).generateToken(any(Authentication.class));
+  }
+
+
 
 
   SignupRequestDto signupRequestDto(){
