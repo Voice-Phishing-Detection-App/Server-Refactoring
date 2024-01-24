@@ -106,22 +106,40 @@ public class UserServiceTest {
   }
 
   @Test
+  @DisplayName("로그인 실패 - 사용자 아이디 불일치")
+  void login_failure_invalidUserId() {
+    // given
+    LoginDto loginDto = loginDto();
+
+    when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+    // when & then
+    assertThrows(LoginAppException.class, () -> userService.login(loginDto),
+        LoginErrorCode.USERNAME_NOT_FOUND.getMessage());
+
+    // verify
+    verify(userRepository, times(1)).findById(userId);
+    verify(passwordEncoder, times(0)).matches(any(), any());
+    verify(authenticationManager, times(0)).authenticate(any());
+    verify(jwtGenerator, times(0)).generateToken(any(Authentication.class));
+  }
+
+
+
+  @Test
   @DisplayName("로그인 실패 - 비밀번호 불일치")
   void login_failure_invalidPassword() {
     // given
-
     LoginDto loginDto = loginDto();
 
     SignupRequestDto userDto = signupRequestDto();
 
     UserEntity userEntity = new UserEntity(userDto);
 
-
     when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
     when(passwordEncoder.matches(password, userDto.getPassword())).thenReturn(false);
 
-    // given
-
+    // when & then
     assertThrows(LoginAppException.class, () -> userService.login(loginDto),
         LoginErrorCode.INVALID_PASSWORD.getMessage());
 
