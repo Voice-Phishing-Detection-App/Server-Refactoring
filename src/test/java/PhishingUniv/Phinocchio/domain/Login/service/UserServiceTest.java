@@ -124,8 +124,6 @@ public class UserServiceTest {
     verify(jwtGenerator, times(0)).generateToken(any(Authentication.class));
   }
 
-
-
   @Test
   @DisplayName("로그인 실패 - 비밀번호 불일치")
   void login_failure_invalidPassword() {
@@ -148,6 +146,20 @@ public class UserServiceTest {
     verify(passwordEncoder, times(1)).matches(password, userDto.getPassword());
     verify(authenticationManager, times(0)).authenticate(any());
     verify(jwtGenerator, times(0)).generateToken(any(Authentication.class));
+  }
+
+  @Test
+  @DisplayName("회원가입 실패 - 사용자 아이디 중복")
+  void signup_fail_userIdDuplicate() throws LoginAppException {
+    // given
+    String userId = "userId";
+    SignupRequestDto requestDto = signupRequestDto();
+
+    when(userRepository.findById(userId)).thenReturn(Optional.of(new UserEntity()));
+
+    // when & then
+    assertThrows(LoginAppException.class, () -> userService.registerUser(requestDto),
+        LoginErrorCode.USERNAME_DUPLICATED.getMessage());
   }
 
 
