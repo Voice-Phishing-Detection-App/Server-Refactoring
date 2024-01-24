@@ -162,7 +162,19 @@ public class UserServiceTest {
         LoginErrorCode.USERNAME_DUPLICATED.getMessage());
   }
 
+  @Test
+  @DisplayName("회원가입 실패 - 전화번호 중복")
+  void signup_fail_phoneNumberDuplicate() throws LoginAppException {
+    // given
+    String phoneNumber = "01012340000";
+    SignupRequestDto requestDto = signupRequestDto();
 
+    when(userRepository.findByPhoneNumber(phoneNumber)).thenReturn(Optional.of(new UserEntity()));
+
+    // when & then
+    assertThrows(LoginAppException.class, () -> userService.registerUser(requestDto),
+        LoginErrorCode.PHONENUMBER_DUPLICATED.getMessage());
+  }
 
 
   SignupRequestDto signupRequestDto(){
