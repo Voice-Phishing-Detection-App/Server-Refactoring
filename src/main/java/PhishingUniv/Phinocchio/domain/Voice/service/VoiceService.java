@@ -24,4 +24,12 @@ public class VoiceService {
 
     return savedVoice;
   }
+
+
+  public VoiceEntity findByVoiceId(Long voiceId) throws VoiceAppException {
+
+    return voiceRepository.findByVoiceId(voiceId)
+        .orElseThrow(() -> new VoiceAppException(VoiceErrorCode.VOICE_NOT_FOUND));
+  }
+
 }
