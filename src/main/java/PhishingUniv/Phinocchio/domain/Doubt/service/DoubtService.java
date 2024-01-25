@@ -6,6 +6,7 @@ import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
 import PhishingUniv.Phinocchio.domain.FCM.service.FCMService;
@@ -79,7 +80,7 @@ public class DoubtService {
     return user.getDoubtList();
   }
 
-  public ResponseEntity<?> setMLServerUrl(MLServerRequestDto mlServerRequestDto) {
+  public MLServerResponseDto setMLServerUrl(MLServerRequestDto mlServerRequestDto) {
     return mlService.setMLServerUrl(mlServerRequestDto.getUrl());
   }
 

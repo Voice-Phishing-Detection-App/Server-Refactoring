@@ -17,12 +17,12 @@ public class MLService {
     this.restTemplate = new RestTemplate();
   }
 
-  public ResponseEntity<?> setMLServerUrl(String url) {
+  public MLServerResponseDto setMLServerUrl(String url) {
     MLServerUrl = url;
 
     MLServerResponseDto mlServerResponseDto = new MLServerResponseDto();
     mlServerResponseDto.setMlServer(MLServerUrl);
-    return ResponseEntity.ok(mlServerResponseDto);
+    return mlServerResponseDto;
   }
 
   public static MLResponseDto processText(MLRequestDto mlRequestDto) {

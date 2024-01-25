@@ -2,7 +2,9 @@ package PhishingUniv.Phinocchio.domain.Doubt.controller;
 
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtResponseDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,20 +27,23 @@ public class DoubtController {
   private final DoubtService doubtService;
 
   @PostMapping("/doubt")
-  public DoubtResponseDto doubt(@RequestBody DoubtRequestDto doubtDto)
+  public ResponseEntity<?> doubt(@RequestBody DoubtRequestDto doubtDto)
       throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
-    return doubtService.doubt(doubtDto);
+    DoubtResponseDto doubtResponseDto = doubtService.doubt(doubtDto);
+    return ResponseEntity.ok(doubtResponseDto);
   }
 
 
   @GetMapping("/doubt/get")
-  public List<DoubtEntity> getDoubtList() {
-    return doubtService.getDoubtList();
+  public ResponseEntity<?> getDoubtList() {
+    List<DoubtEntity> doubtList = doubtService.getDoubtList();
+    return ResponseEntity.ok(doubtList);
   }
 
 
   @PostMapping("/doubt/set-ml-server")
   public ResponseEntity<?> setMLServer(@RequestBody MLServerRequestDto mlServerRequestDto) {
-    return doubtService.setMLServerUrl(mlServerRequestDto);
+    MLServerResponseDto mlServerResponseDto = doubtService.setMLServerUrl(mlServerRequestDto);
+    return ResponseEntity.ok(mlServerResponseDto);
   }
 }
