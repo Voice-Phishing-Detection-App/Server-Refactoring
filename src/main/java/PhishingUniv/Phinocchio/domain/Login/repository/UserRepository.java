@@ -8,19 +8,12 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
-
-
-    //Id : 로그인 시 사용하는 거
+    //Id : 실제 로그인시 사용하는 아이디
     Optional<UserEntity> findById(String id);
 
     Optional<UserEntity> findByFcmToken(String fcmToken);
 
-    Optional<UserEntity> findByIdAndFcmToken(String id, String fcmToken);
-
     Optional<UserEntity> findByPhoneNumber(String phoneNumber);
-    Optional<UserEntity> findByName(String name);
-
-    Optional<UserEntity> findByUserId(Long userId);
 
     List<UserEntity> findAll();
 
