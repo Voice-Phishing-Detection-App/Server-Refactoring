@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,7 +65,7 @@ public class DoubtControllerTest {
 
   @DisplayName("보이스피싱 의심 여부 판단 - 성공")
   @Test
-  void doubtSuccess() throws Exception {
+  void SuccessToVoicePhishingDetection() throws Exception {
     // stub
     DoubtRequestDto doubtRequestDto = doubtRequestDto();
     DoubtResponseDto doubtResponseDto = doubtResponseDto();
@@ -91,7 +92,7 @@ public class DoubtControllerTest {
 
   @DisplayName("보이스피싱 의심 여부 판단 - 실패 (토큰 만료)")
   @Test
-  void doubtFail_JwtToken() throws Exception {
+  void FailToVoicePhishingDetectionWhenJwtExpires() throws Exception {
     // stub
     DoubtRequestDto doubtRequestDto = doubtRequestDto();
     LoginAppException loginAppException = new LoginAppException(LoginErrorCode.JWT_USER_NOT_FOUND);
@@ -118,7 +119,7 @@ public class DoubtControllerTest {
 
   @DisplayName("보이스피싱 의심 여부 판단 - 실패 (머신러닝 서버와 통신 문제)")
   @Test
-  void doubtFail_DisconnectedToMlServer() throws Exception {
+  void FailToVoicePhishingDetectionDueToUnconnectedMLServer() throws Exception {
     // stub
     DoubtRequestDto doubtRequestDto = doubtRequestDto();
     DoubtAppException doubtAppException = new DoubtAppException(
@@ -146,7 +147,7 @@ public class DoubtControllerTest {
 
   @DisplayName("보이스피싱 의심 여부 판단 - 실패 (의심내역 저장 문제)")
   @Test
-  void doubtFail_SaveDoubt() throws Exception {
+  void FailToVoicePhishingDetectionDueToUnsavedDoubt() throws Exception {
     // stub
     DoubtRequestDto doubtRequestDto = doubtRequestDto();
     DoubtAppException doubtAppException = new DoubtAppException(DoubtErrorCode.FAILED_TO_SAVE);
@@ -173,7 +174,7 @@ public class DoubtControllerTest {
 
   @DisplayName("보이스피싱 의심 여부 판단 - 실패 (목소리 저장 문제)")
   @Test
-  void doubtFail_SaveVoice() throws Exception {
+  void FailToVoicePhishingDetectionDueToUnsavedVoice() throws Exception {
     // stub
     DoubtRequestDto doubtRequestDto = doubtRequestDto();
     VoiceAppException voiceAppException = new VoiceAppException(VoiceErrorCode.FAILED_TO_SAVE);
@@ -200,7 +201,7 @@ public class DoubtControllerTest {
 
   @DisplayName("보이스피싱 의심 여부 판단 - 실패 (FCM push 문제)")
   @Test
-  void doubtFail_FCM() throws Exception {
+  void FailToVoicePhishingDetectionDueToFcmPush() throws Exception {
     // stub
     DoubtRequestDto doubtRequestDto = doubtRequestDto();
     FCMAppException fcmAppException = new FCMAppException(FCMErrorCode.FCM_ERROR);
@@ -227,7 +228,7 @@ public class DoubtControllerTest {
 
   @DisplayName("보이스피싱 의심 여부 판단 - 실패 (긴급연락처로 SMS 문자 전송 문제)")
   @Test
-  void doubtFail_SMS() throws Exception {
+  void FailToVoicePhishingDetectionDueToSMS() throws Exception {
     // stub
     DoubtRequestDto doubtRequestDto = doubtRequestDto();
     SosAppException sosAppException = new SosAppException(SosErrorCode.FAILED_TO_SEND_SMS);
