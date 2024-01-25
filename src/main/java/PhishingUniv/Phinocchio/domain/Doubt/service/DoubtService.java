@@ -126,13 +126,11 @@ public class DoubtService {
   private void sendSms(int level)
       throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException,
       JsonProcessingException, LoginAppException, SosAppException {
-    String id = userService.getCurrentId();
 
     // 메세지 설정
-    UserEntity userEntity = userRepository.findById(id)
-        .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
-    String userPhone = userEntity.getPhoneNumber();
-    Long userId = userEntity.getUserId();
+    UserEntity user = userService.getCurrentUser();
+    String userPhone = user.getPhoneNumber();
+    Long userId = user.getUserId();
     String smsMsg = SMS.SEND_SMS.getSmsContent(userPhone, getDoubtLevelName(level));
 
     MessageDTO messageDTO = MessageDTO.builder()
