@@ -26,7 +26,6 @@ import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
 import PhishingUniv.Phinocchio.exception.FCM.FCMErrorCode;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
-import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.exception.Setting.SettingAppException;
 import PhishingUniv.Phinocchio.exception.Sos.SosAppException;
 import PhishingUniv.Phinocchio.exception.Sos.SosErrorCode;
@@ -43,7 +42,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -152,11 +150,7 @@ public class DoubtService {
       JsonProcessingException, InvalidJwtException, DoubtAppException, SettingAppException {
 
     // userId 불러오기
-    String ID = SecurityContextHolder.getContext().getAuthentication().getName();
-    UserEntity userEntity = userRepository.findById(ID).orElseThrow(
-        () -> new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
-
-    Long userId = userEntity.getUserId();
+    UserEntity user = userService.getCurrentUser();
 
     // 머신러닝 서버로 mlRequestDto를 전송하고 응답을 받음
     MLRequestDto mlRequestDto = new MLRequestDto(doubtRequestDto.getText());
@@ -190,18 +184,12 @@ public class DoubtService {
       sendSms(level);
 
       // 보이스피싱 알람 설정 한 경우: push 알람 보내기
-      String fcmToken = getFcmToken(ID);
+      String fcmToken = user.getFcmToken();
       String fcmMessageTitle = setFcmMessageTitle();
       String fcmMessageBody = setFcmMessageBody(level);
       sendFCMNotification(fcmToken, fcmMessageTitle, fcmMessageBody);
     }
     return ResponseEntity.ok(mlResponseDto);
-  }
-
-  private String getFcmToken(String id) {
-    UserEntity user = userRepository.findById(id)
-        .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
-    return user.getFcmToken();
   }
 
   private void sendFCMNotification(String fcmToken, String title, String body) {
