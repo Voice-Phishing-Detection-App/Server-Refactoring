@@ -11,7 +11,6 @@ import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -69,6 +68,7 @@ public class UserService {
   }
 
 
+
   public ResponseEntity<?> registerUser(SignupRequestDto requestDto) {
     //같은 id를 가지는 중복 회원 X
     validateDuplicateUser(requestDto);
@@ -83,6 +83,9 @@ public class UserService {
 
   }
 
+        }catch (LoginAppException e){
+            throw new LoginAppException(e.getErrorCode());
+        }
 
   public List<UserEntity> findUsers() {
     return userRepository.findAll();

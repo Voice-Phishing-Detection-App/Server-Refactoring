@@ -39,16 +39,16 @@ public class UserController {
         String token= userService.login(loginDto);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Bearer " + token);
+
         return ResponseEntity.ok().headers(httpHeaders).body(new TokenDto(token));
-          //return ResponseEntity.ok(new TokenDto());
     }
 
     @PostMapping("/signup")
     @Operation(summary = "회원가입을 하는 컨트롤러", description = "회원가입을 하는 컨트롤러입니다.")
     public ResponseEntity<?> signup(@RequestBody SignupRequestDto requestDto) {
-        return userService.registerUser(requestDto);
+        SignupResponseDto signupResponseDto = userService.registerUser(requestDto);
 
-
+        return ResponseEntity.ok(signupResponseDto);
     }
 
     @GetMapping("/hello")
