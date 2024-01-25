@@ -46,7 +46,7 @@ public class ReportEntity extends Timestamp {
   @Column(name = "phone_number", nullable = false, length = 20)
   private String phoneNumber;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   @JsonIgnoreProperties({"doubtList", "sosList"})
   private UserEntity user;
