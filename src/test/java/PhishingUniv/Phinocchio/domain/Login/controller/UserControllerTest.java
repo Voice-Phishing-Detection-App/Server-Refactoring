@@ -252,6 +252,25 @@ class UserControllerTest {
   }
 
 
+  public SignupRequestDto signupRequestDto(){
+    SignupRequestDto requestDto = new SignupRequestDto();
+    requestDto.setId("userId");
+    requestDto.setName("userName");
+    requestDto.setPassword("password");
+    requestDto.setPhoneNumber("01012345678");
+    requestDto.setFcmToken("fcmToken");
+
+    return requestDto;
+  }
+
+  LoginDto loginDto(){
+    LoginDto loginDto = new LoginDto();
+    loginDto.setId("userId");
+    loginDto.setPassword("password");
+
+    return loginDto;
+  }
+
     @Test
     void login() {
     }
