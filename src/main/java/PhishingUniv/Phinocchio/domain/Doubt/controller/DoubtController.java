@@ -1,7 +1,7 @@
 package PhishingUniv.Phinocchio.domain.Doubt.controller;
 
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
-import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
@@ -25,10 +25,9 @@ public class DoubtController {
   private final DoubtService doubtService;
 
   @PostMapping("/doubt")
-  public ResponseEntity<?> doubt(@RequestBody DoubtRequestDto doubtDto)
+  public DoubtResponseDto doubt(@RequestBody DoubtRequestDto doubtDto)
       throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
-    MLResponseDto mlResponseDto = doubtService.doubt(doubtDto);
-    return ResponseEntity.ok(mlResponseDto);
+    return doubtService.doubt(doubtDto);
   }
 
 
