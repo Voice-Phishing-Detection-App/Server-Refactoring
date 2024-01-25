@@ -176,6 +176,20 @@ public class UserServiceTest {
         LoginErrorCode.PHONENUMBER_DUPLICATED.getMessage());
   }
 
+  @Test
+  @DisplayName("회원가입 실패 - 디바이스 중복")
+  void signup_fail_deviceDuplicate() throws LoginAppException {
+    // given
+    String fcmToken = "fcmToken";
+    SignupRequestDto requestDto = signupRequestDto();
+
+    when(userRepository.findByFcmToken(fcmToken)).thenReturn(Optional.of(new UserEntity()));
+
+    // when & then
+    assertThrows(LoginAppException.class, () -> userService.registerUser(requestDto),
+        LoginErrorCode.DEVICE_DUPLICATED.getMessage());
+  }
+
 
   SignupRequestDto signupRequestDto(){
 
