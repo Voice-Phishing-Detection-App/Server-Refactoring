@@ -36,6 +36,21 @@ public class UserRepositoryTest {
   }
 
   @Test
+  @DisplayName("fcm token 으로 사용자 엔티티 조회")
+  public void testFindByFcmToken() {
+    // given
+    UserEntity user = new UserEntity(signupRequestDto());
+    userRepository.save(user);
+
+    // when
+    Optional<UserEntity> foundUser = userRepository.findByFcmToken("fcmToken");
+
+    // then
+    assertTrue(foundUser.isPresent());
+    assertEquals("fcmToken", foundUser.get().getFcmToken());
+  }
+
+  @Test
   @DisplayName("전화번호로 사용자 엔티티 조회")
   public void testFindByPhoneNumber() {
     // given
