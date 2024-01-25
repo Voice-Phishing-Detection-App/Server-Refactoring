@@ -1,6 +1,5 @@
 package PhishingUniv.Phinocchio.domain.Login.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,7 +21,7 @@ public class UserRepositoryTest {
 
   @Test
   @DisplayName("아이디로 사용자 엔티티 조회")
-  public void testFindById() {
+  public void selectUserById() {
     // given
     UserEntity user = new UserEntity(signupRequestDto());
     userRepository.save(user);
@@ -36,8 +35,8 @@ public class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("fcm token 으로 사용자 엔티티 조회")
-  public void testFindByFcmToken() {
+  @DisplayName("fcm token으로 사용자 엔티티 조회")
+  public void selectUserByFcmToken() {
     // given
     UserEntity user = new UserEntity(signupRequestDto());
     userRepository.save(user);
@@ -52,7 +51,7 @@ public class UserRepositoryTest {
 
   @Test
   @DisplayName("전화번호로 사용자 엔티티 조회")
-  public void testFindByPhoneNumber() {
+  public void selectUserByPhoneNumber() {
     // given
     UserEntity user = new UserEntity(signupRequestDto());
     userRepository.save(user);
