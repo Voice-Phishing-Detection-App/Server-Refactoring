@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor //이게 있어야 findReportEntitiesById가 작동함
+@NoArgsConstructor
 public class ReportEntity extends Timestamp {
 
   @Id
@@ -55,13 +55,4 @@ public class ReportEntity extends Timestamp {
   @JoinColumn(name = "voice_id")
   private VoiceEntity voice;
 
-  public ReportEntity(ReportType reportType, String title, String content, String phoneNumber,
-      UserEntity user, VoiceEntity voice) {
-    this.title = title;
-    this.type = reportType;
-    this.content = content;
-    this.phoneNumber = phoneNumber;
-    this.user = user;
-    this.voice = voice;
-  }
 }
