@@ -98,9 +98,7 @@ public class DoubtService {
   private void addDoubt(DoubtRequestDto doubtRequestDto, String text, int level)
       throws InvalidJwtException, DoubtAppException, VoiceAppException {
     // userId 불러오기
-    String id = userService.getCurrentId();
-    UserEntity userEntity = userService.findOne(id).orElseThrow(
-        () -> new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
+    UserEntity user = userService.getCurrentUser();
 
     // 목소리 저장
     VoiceEntity voiceEntity = new VoiceEntity();
@@ -114,7 +112,7 @@ public class DoubtService {
     DoubtEntity doubtEntity = new DoubtEntity();
     doubtEntity.setPhoneNumber(doubtRequestDto.getPhoneNumber());
     doubtEntity.setLevel(level);
-    doubtEntity.setUser(userEntity);
+    doubtEntity.setUser(user);
     doubtEntity.setTitle(getCurrentTime());
     doubtEntity.setVoice(savedVoiceEntity);
     DoubtEntity savedDoubtEntity = doubtRepository.save(doubtEntity);
