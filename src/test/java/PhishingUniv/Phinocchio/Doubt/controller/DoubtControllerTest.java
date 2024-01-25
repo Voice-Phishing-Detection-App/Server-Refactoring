@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import PhishingUniv.Phinocchio.domain.Doubt.controller.DoubtController;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
@@ -66,10 +67,10 @@ public class DoubtControllerTest {
   void doubtSuccess() throws Exception {
     // stub
     DoubtRequestDto doubtRequestDto = doubtRequestDto();
-    MLResponseDto mlResponseDto = mlResponseDto();
+    DoubtResponseDto doubtResponseDto = doubtResponseDto();
 
     // given
-    given(doubtService.doubt(any(DoubtRequestDto.class))).willReturn(mlResponseDto);
+    given(doubtService.doubt(any(DoubtRequestDto.class))).willReturn(doubtResponseDto);
 
     // when
     ResultActions result = mockMvc.perform(post("/doubt")
@@ -258,11 +259,11 @@ public class DoubtControllerTest {
     return doubtRequestDto;
   }
 
-  private MLResponseDto mlResponseDto() {
-    MLResponseDto mlResponseDto = new MLResponseDto();
-    mlResponseDto.setLevel(2);
-    mlResponseDto.setPhishing(true);
-    return mlResponseDto;
+  private DoubtResponseDto doubtResponseDto() {
+    DoubtResponseDto doubtResponseDto = new DoubtResponseDto();
+    doubtResponseDto.setLevel(2);
+    doubtResponseDto.setPhishing(true);
+    return doubtResponseDto;
   }
 
 }
