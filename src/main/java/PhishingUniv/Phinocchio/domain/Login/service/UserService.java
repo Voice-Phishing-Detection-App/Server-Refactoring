@@ -69,7 +69,7 @@ public class UserService {
 
 
 
-  public ResponseEntity<?> registerUser(SignupRequestDto requestDto) {
+  public SignupResponseDto registerUser(SignupRequestDto requestDto) {
     //같은 id를 가지는 중복 회원 X
     validateDuplicateUser(requestDto);
     validateDuplicatePhoneNumber(requestDto);
@@ -78,14 +78,10 @@ public class UserService {
     UserEntity user = new UserEntity(requestDto);
     userRepository.save(user);
 
-    return ResponseEntity.ok(new SignupResponseDto(user.getId()));
+    return new SignupResponseDto(user.getId());
 
 
   }
-
-        }catch (LoginAppException e){
-            throw new LoginAppException(e.getErrorCode());
-        }
 
   public List<UserEntity> findUsers() {
     return userRepository.findAll();
