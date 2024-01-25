@@ -54,7 +54,7 @@ public class UserServiceTest {
 
   @Test
   @DisplayName("회원가입 성공")
-  void registerUser_success() throws LoginAppException {
+  void successToRegisterUser() throws LoginAppException {
     // given
     SignupRequestDto requestDto = signupRequestDto();
 
@@ -75,7 +75,7 @@ public class UserServiceTest {
 
   @Test
   @DisplayName("로그인 성공")
-  void login_success() throws LoginAppException {
+  void successToLogin() throws LoginAppException {
     // given
 
     LoginDto loginDto = loginDto();
@@ -107,7 +107,7 @@ public class UserServiceTest {
 
   @Test
   @DisplayName("로그인 실패 - 사용자 아이디 불일치")
-  void login_failure_invalidUserId() {
+  void failToLoginIfUserIdInvalid() {
     // given
     LoginDto loginDto = loginDto();
 
@@ -126,7 +126,7 @@ public class UserServiceTest {
 
   @Test
   @DisplayName("로그인 실패 - 비밀번호 불일치")
-  void login_failure_invalidPassword() {
+  void failToLoginIfPasswordInvalid() {
     // given
     LoginDto loginDto = loginDto();
 
@@ -150,7 +150,7 @@ public class UserServiceTest {
 
   @Test
   @DisplayName("회원가입 실패 - 사용자 아이디 중복")
-  void signup_fail_userIdDuplicate() throws LoginAppException {
+  void failToSignUpIfUserIdDuplicate() throws LoginAppException {
     // given
     String userId = "userId";
     SignupRequestDto requestDto = signupRequestDto();
@@ -164,7 +164,7 @@ public class UserServiceTest {
 
   @Test
   @DisplayName("회원가입 실패 - 전화번호 중복")
-  void signup_fail_phoneNumberDuplicate() throws LoginAppException {
+  void failToSignUpIfPhoneNumberDuplicate() throws LoginAppException {
     // given
     String phoneNumber = "01012340000";
     SignupRequestDto requestDto = signupRequestDto();
@@ -178,7 +178,7 @@ public class UserServiceTest {
 
   @Test
   @DisplayName("회원가입 실패 - 디바이스 중복")
-  void signup_fail_deviceDuplicate() throws LoginAppException {
+  void failToSignUpIfDeviceDuplicate() throws LoginAppException {
     // given
     String fcmToken = "fcmToken";
     SignupRequestDto requestDto = signupRequestDto();
