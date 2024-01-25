@@ -1,6 +1,7 @@
 package PhishingUniv.Phinocchio.domain.Sos.service;
 
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
+import PhishingUniv.Phinocchio.domain.Login.service.UserService;
 import PhishingUniv.Phinocchio.domain.Sos.dto.SosDeleteDto;
 import PhishingUniv.Phinocchio.domain.Sos.dto.SosDto;
 import PhishingUniv.Phinocchio.domain.Sos.dto.SosUpdateDto;
@@ -11,6 +12,8 @@ import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.exception.Sos.SosAppException;
 import PhishingUniv.Phinocchio.exception.Sos.SosErrorCode;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -18,78 +21,88 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class SosService {
 
-    private final SosRepository sosRepository;
+  private final SosRepository sosRepository;
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    private final ModelMapper modelMapper;
+  private final UserService userService;
 
-    private SosEntity convertToEntity(SosDto sosDto) {
-        return modelMapper.map(sosDto, SosEntity.class);
+  private final ModelMapper modelMapper;
+
+  private SosEntity convertToEntity(SosDto sosDto) {
+    return modelMapper.map(sosDto, SosEntity.class);
+  }
+
+  private SosEntity convertToEntity(SosUpdateDto sosUpdateDto) {
+    return modelMapper.map(sosUpdateDto, SosEntity.class);
+  }
+
+  public List<SosEntity> sosList() throws LoginAppException {
+    String id = SecurityContextHolder.getContext().getAuthentication().getName();
+    UserEntity userEntity = userRepository.findById(id)
+        .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
+    List<SosEntity> sosList = userEntity.getSosList();
+
+    return sosList;
+  }
+
+  public ResponseEntity<?> addSos(SosDto sosDto) throws LoginAppException {
+    SosEntity sosEntity = convertToEntity(sosDto);
+
+    String id = SecurityContextHolder.getContext().getAuthentication().getName();
+    UserEntity userEntity = userRepository.findById(id)
+        .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
+
+    sosEntity.setUser(userEntity);
+
+    sosRepository.save(sosEntity);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  public ResponseEntity updateSos(SosUpdateDto sosUpdateDto)
+      throws SosAppException, LoginAppException {
+    sosRepository.findById(sosUpdateDto.getSosId())
+        .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND));
+
+    SosEntity sosEntity = convertToEntity(sosUpdateDto);
+
+    String id = SecurityContextHolder.getContext().getAuthentication().getName();
+    UserEntity userEntity = userRepository.findById(id)
+        .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
+
+    sosEntity.setUser(userEntity);
+    sosRepository.save(sosEntity);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+
+  }
+
+  public ResponseEntity deleteSos(SosDeleteDto sosDeleteDto) throws SosAppException {
+    SosEntity sosEntity = sosRepository.findById(sosDeleteDto.getSosId())
+        .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND));
+
+    sosRepository.delete(sosEntity);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+
+  }
+
+  public List<SosEntity> getSosListByLevel(int level) {
+    UserEntity user = userService.getCurrentUser();
+    List<SosEntity> sosList = user.getSosList();
+
+    List<SosEntity> sosListByLevel = new ArrayList<>();
+    for (SosEntity sos : sosList) {
+      if (sos.getLevel() >= level) {
+        sosListByLevel.add(sos);
+      }
     }
 
-    private SosEntity convertToEntity(SosUpdateDto sosUpdateDto) {
-        return modelMapper.map(sosUpdateDto, SosEntity.class);
-    }
-
-    public List<SosEntity> sosList() throws LoginAppException{
-        String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
-        List<SosEntity> sosList = userEntity.getSosList();
-
-        return sosList;
-    }
-
-    public ResponseEntity<?> addSos(SosDto sosDto) throws LoginAppException{
-        SosEntity sosEntity = convertToEntity(sosDto);
-
-        String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
-
-        sosEntity.setUser(userEntity);
-
-        sosRepository.save(sosEntity);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    public ResponseEntity updateSos(SosUpdateDto sosUpdateDto) throws SosAppException, LoginAppException{
-        sosRepository.findById(sosUpdateDto.getSosId())
-                .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND));
-
-        SosEntity sosEntity = convertToEntity(sosUpdateDto);
-
-        String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
-
-        sosEntity.setUser(userEntity);
-        sosRepository.save(sosEntity);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-
-    }
-
-    public ResponseEntity deleteSos(SosDeleteDto sosDeleteDto) throws SosAppException{
-        SosEntity sosEntity = sosRepository.findById(sosDeleteDto.getSosId())
-                .orElseThrow(() -> new SosAppException(SosErrorCode.SOS_NOT_FOUND));
-
-        sosRepository.delete(sosEntity);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-
-    }
-
-    public List<SosEntity> getSosListByLevel (Long userId, int level) {
-        List<SosEntity> sosEntities = sosRepository.findByUserIdAndLevelGreaterThanEqual(userId, level);
-        return sosEntities;
-    }
+    return sosListByLevel;
+  }
 
 }

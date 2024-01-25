@@ -99,7 +99,7 @@ public class UserService {
     return currentId;
   }
 
-  public UserEntity findUserById(String id) {
+  public UserEntity findUserById(String id) throws InvalidJwtException {
     UserEntity user = userRepository.findById(id).orElseThrow(
         () -> new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
     return user;
