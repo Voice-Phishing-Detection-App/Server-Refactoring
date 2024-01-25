@@ -83,9 +83,6 @@ public class UserService {
 
   }
 
-  public List<UserEntity> findUsers() {
-    return userRepository.findAll();
-  }
 
   public UserEntity getCurrentUser() {
     String currentId = getCurrentId();
