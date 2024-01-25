@@ -169,7 +169,7 @@ class UserControllerTest {
 
   @Test
   @DisplayName("회원가입 실패 - 사용자 아이디 중복")
-  void failToSignUpIfUserIdInvalid() throws Exception {
+  void failToSignUpIfUserIdDuplicate() throws Exception {
 
     // stub
     SignupRequestDto requestDto = signupRequestDto();
@@ -197,7 +197,7 @@ class UserControllerTest {
 
   @Test
   @DisplayName("회원가입 실패 - 전화번호 중복")
-  void failToSignUpIfPhoneNumberInvalid() throws Exception {
+  void failToSignUpIfPhoneNumberDuplicate() throws Exception {
 
     // stub
     SignupRequestDto requestDto = signupRequestDto();
@@ -225,7 +225,7 @@ class UserControllerTest {
 
   @Test
   @DisplayName("회원가입 실패 - 디바이스 중복")
-  void failToSignUpIfDeviceInvalid() throws Exception {
+  void failToSignUpIfDeviceDuplicate() throws Exception {
 
     // stub
     SignupRequestDto requestDto = signupRequestDto();
