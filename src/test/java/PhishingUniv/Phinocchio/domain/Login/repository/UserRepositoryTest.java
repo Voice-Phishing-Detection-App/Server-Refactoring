@@ -31,8 +31,23 @@ public class UserRepositoryTest {
     Optional<UserEntity> foundUser = userRepository.findById("userId");
 
     // then
-    assertThat(foundUser.isPresent());
+    assertTrue(foundUser.isPresent());
     assertEquals("userId", foundUser.get().getId());
+  }
+
+  @Test
+  @DisplayName("전화번호로 사용자 엔티티 조회")
+  public void testFindByPhoneNumber() {
+    // given
+    UserEntity user = new UserEntity(signupRequestDto());
+    userRepository.save(user);
+
+    // when
+    Optional<UserEntity> foundUser = userRepository.findByPhoneNumber("01012340000");
+
+    // then
+    assertTrue(foundUser.isPresent());
+    assertEquals("01012340000", foundUser.get().getPhoneNumber());
   }
 
 
