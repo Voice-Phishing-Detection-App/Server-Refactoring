@@ -59,17 +59,12 @@ class UserControllerTest {
 
     @Test
     @DisplayName("회원가입 성공")
-    void signup() throws Exception {
+    void successToSignUp() throws Exception {
         // stub
-         SignupRequestDto requestDto = new SignupRequestDto();
-         requestDto.setId("userId3");
-         requestDto.setName("userName3");
-         requestDto.setPassword("password3");
-         requestDto.setPhoneNumber("01033330000");
-         requestDto.setFcmToken("fcmToken3");
+         SignupRequestDto requestDto = signupRequestDto();
 
         SignupResponseDto responseDto = new SignupResponseDto();
-        responseDto.setId("userId3");
+        responseDto.setId("userId");
 
         //given
         given(userService.registerUser(any(SignupRequestDto.class)))
@@ -87,18 +82,16 @@ class UserControllerTest {
         result
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").exists())
-            .andExpect(jsonPath("$.id").value("userId3"))
+            .andExpect(jsonPath("$.id").value("userId"))
             .andDo(print());
     }
 
 
   @Test
   @DisplayName("로그인 성공")
-  void login_success() throws Exception {
+  void successToLogin() throws Exception {
       // stub
-      LoginDto loginDto = new LoginDto();
-      loginDto.setId("userId3");
-      loginDto.setPassword("password3");
+      LoginDto loginDto = loginDto();
 
       // given
       given(userService.login(any(LoginDto.class)))
@@ -119,13 +112,11 @@ class UserControllerTest {
   }
 
   @Test
-  @DisplayName("로그인 실패 - 올바르지 않은 사용자 id 입력")
-  void login_fail_username() throws Exception {
+  @DisplayName("로그인 실패 - 사용자 아이디 불일치")
+  void failToLoginIfUserIdInvalid() throws Exception {
 
       // stub
-      LoginDto loginDto = new LoginDto();
-      loginDto.setId("love");
-      loginDto.setPassword("iloveyou");
+      LoginDto loginDto = loginDto();
 
       // given
       given(userService.login(any(LoginDto.class)))
@@ -149,13 +140,11 @@ class UserControllerTest {
   }
 
   @Test
-  @DisplayName("로그인 실패 - 올바르지 않은 패스워드 입력")
-  void login_fail_password() throws Exception {
+  @DisplayName("로그인 실패 - 비밀번호 불일치")
+  void failToLoginIfPasswordInvalid() throws Exception {
 
     // stub
-    LoginDto loginDto = new LoginDto();
-    loginDto.setId("userId3");
-    loginDto.setPassword("iloveyou");
+    LoginDto loginDto = loginDto();
 
     // given
     given(userService.login(any(LoginDto.class)))
@@ -179,16 +168,11 @@ class UserControllerTest {
   }
 
   @Test
-  @DisplayName("회원가입 실패 - 사용자 id 중복")
-  void signup_fail_userId() throws Exception {
+  @DisplayName("회원가입 실패 - 사용자 아이디 중복")
+  void failToSignUpIfUserIdInvalid() throws Exception {
 
     // stub
-    SignupRequestDto requestDto = new SignupRequestDto();
-    requestDto.setId("userId3");
-    requestDto.setName("userName4");
-    requestDto.setPassword("password4");
-    requestDto.setPhoneNumber("01044440000");
-    requestDto.setFcmToken("fcmToken4");
+    SignupRequestDto requestDto = signupRequestDto();
 
     // given
     given(userService.registerUser(any(SignupRequestDto.class)))
@@ -213,15 +197,10 @@ class UserControllerTest {
 
   @Test
   @DisplayName("회원가입 실패 - 전화번호 중복")
-  void signup_fail_phoneNumber() throws Exception {
+  void failToSignUpIfPhoneNumberInvalid() throws Exception {
 
     // stub
-    SignupRequestDto requestDto = new SignupRequestDto();
-    requestDto.setId("userId4");
-    requestDto.setName("userName4");
-    requestDto.setPassword("password4");
-    requestDto.setPhoneNumber("01033330000");
-    requestDto.setFcmToken("fcmToken4");
+    SignupRequestDto requestDto = signupRequestDto();
 
     // given
     given(userService.registerUser(any(SignupRequestDto.class)))
@@ -246,15 +225,10 @@ class UserControllerTest {
 
   @Test
   @DisplayName("회원가입 실패 - 디바이스 중복")
-  void signup_fail_device() throws Exception {
+  void failToSignUpIfDeviceInvalid() throws Exception {
 
     // stub
-    SignupRequestDto requestDto = new SignupRequestDto();
-    requestDto.setId("userId4");
-    requestDto.setName("userName4");
-    requestDto.setPassword("password4");
-    requestDto.setPhoneNumber("01044440000");
-    requestDto.setFcmToken("fcmToken3");
+    SignupRequestDto requestDto = signupRequestDto();
 
     // given
     given(userService.registerUser(any(SignupRequestDto.class)))
@@ -276,6 +250,7 @@ class UserControllerTest {
         .andExpect(jsonPath("$.message").value("해당 기기에서 사용중인 계정이 존재합니다."))
         .andDo(print());
   }
+
 
     @Test
     void login() {
