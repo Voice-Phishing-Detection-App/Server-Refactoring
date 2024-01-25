@@ -10,6 +10,7 @@ import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.repository.DoubtRepository;
 import PhishingUniv.Phinocchio.domain.FCM.service.FCMNotificationService;
 import PhishingUniv.Phinocchio.domain.Login.repository.UserRepository;
+import PhishingUniv.Phinocchio.domain.Login.service.UserService;
 import PhishingUniv.Phinocchio.domain.Setting.repository.SettingRepository;
 import PhishingUniv.Phinocchio.domain.Sos.dto.MessageDTO;
 import PhishingUniv.Phinocchio.domain.Sos.dto.SmsResponseDTO;
@@ -67,6 +68,8 @@ public class DoubtService {
 
   private final FCMNotificationService fcmNotificationService;
 
+  private final UserService userService;
+
   public String getCurrentTime() {
     LocalDate nowDate = LocalDate.now();
     LocalTime nowTime = LocalTime.now();
@@ -86,24 +89,18 @@ public class DoubtService {
     return sb.toString();
   }
 
-  //의심 목록 조회
   public List<DoubtEntity> getDoubtList() throws InvalidJwtException {
-    String ID = SecurityContextHolder.getContext().getAuthentication().getName();
-    UserEntity userEntity = userRepository.findById(ID).orElseThrow(
-        () -> new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
-
-    return userEntity.getDoubtList();
+    UserEntity user = userService.getCurrentUser();
+    return user.getDoubtList();
 
   }
 
   private void addDoubt(DoubtRequestDto doubtRequestDto, String text, int level)
       throws InvalidJwtException, DoubtAppException, VoiceAppException {
     // userId 불러오기
-    String ID = SecurityContextHolder.getContext().getAuthentication().getName();
-    UserEntity userEntity = userRepository.findById(ID).orElseThrow(
+    String id = userService.getCurrentId();
+    UserEntity userEntity = userService.findOne(id).orElseThrow(
         () -> new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND));
-
-    Long userId = userEntity.getUserId();
 
     // 목소리 저장
     VoiceEntity voiceEntity = new VoiceEntity();
@@ -131,8 +128,8 @@ public class DoubtService {
   private void sendSms(int level)
       throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException,
       JsonProcessingException, LoginAppException, SosAppException {
+    String id = userService.getCurrentId();
 
-    String id = SecurityContextHolder.getContext().getAuthentication().getName();
     // 메세지 설정
     UserEntity userEntity = userRepository.findById(id)
         .orElseThrow(() -> new LoginAppException(LoginErrorCode.USERNAME_NOT_FOUND));
@@ -148,9 +145,9 @@ public class DoubtService {
     for (SosEntity sosEntity : sosEntities) {
       messageDTO.setTo(sosEntity.getPhoneNumber());
       SmsResponseDTO smsResponseDTO = smsService.sendSms(messageDTO);
-        if (!smsResponseDTO.getStatusCode().equals("202")) {
-            throw new SosAppException(SosErrorCode.FAILED_TO_SEND_SMS);
-        }
+      if (!smsResponseDTO.getStatusCode().equals("202")) {
+        throw new SosAppException(SosErrorCode.FAILED_TO_SEND_SMS);
+      }
     }
   }
 
