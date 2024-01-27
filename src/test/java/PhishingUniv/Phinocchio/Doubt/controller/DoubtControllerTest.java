@@ -313,7 +313,7 @@ public class DoubtControllerTest {
     verify(doubtService).getDoubtList();
   }
 
-  @DisplayName("보이스피싱 의심내력 목록 조ㄴㄷㅅ샤 - 실패 (토큰 만료)")
+  @DisplayName("보이스피싱 의심내력 목록 조회 - 실패 (토큰 만료)")
   @Test
   void FailToVoicePhishingListSearchWhenJwtExpires () throws Exception {
     // stub
