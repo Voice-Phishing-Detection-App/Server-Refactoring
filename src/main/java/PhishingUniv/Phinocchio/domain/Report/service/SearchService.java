@@ -6,6 +6,8 @@ import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportType;
 import PhishingUniv.Phinocchio.domain.Report.repository.ReportRepository;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
+import PhishingUniv.Phinocchio.exception.Report.ReportAppException;
+import PhishingUniv.Phinocchio.exception.Report.ReportErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +24,9 @@ public class SearchService {
     public SearchResponseDto getReportCount(String phoneNumber)throws InvalidJwtException{
         ensureUserAuthenticated();
 
-        List<ReportEntity> reportList = findReportListByPhoneNumber(phoneNumber);
+        List<ReportEntity> reportList = reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
         List<ReportType> reportTypes = findReportTypes(reportList);
-        Long reportCount = getCountByPhoneNumber(phoneNumber);
+        Long reportCount = reportRepository.countByPhoneNumber(phoneNumber);
 
         if(reportCount == 0){
             reportTypes.add(ReportType.REPORT_TYPE_NONE);
@@ -33,18 +35,20 @@ public class SearchService {
         return new SearchResponseDto(phoneNumber, reportCount, reportTypes);
     }
 
-    public List<ReportEntity> getReportDetail(String phoneNumber)throws InvalidJwtException{
+    public List<ReportEntity> getReportDetail(String phoneNumber)throws InvalidJwtException, ReportAppException{
         ensureUserAuthenticated();
 
-        return findReportListByPhoneNumber(phoneNumber);
+        List<ReportEntity> reports = reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
+
+        if(reports.isEmpty()){
+            throw new ReportAppException(ReportErrorCode.REPORT_NOT_FOUND);
+        }
+
+        return reports;
     }
 
     private void ensureUserAuthenticated() throws InvalidJwtException {
         userService.getCurrentUser();
-    }
-
-    private List<ReportEntity> findReportListByPhoneNumber(String phoneNumber){
-        return reportRepository.findReportEntitiesByPhoneNumber(phoneNumber);
     }
 
     private List<ReportType> findReportTypes(List<ReportEntity> reportList){
@@ -54,7 +58,4 @@ public class SearchService {
             .collect(Collectors.toList());
     }
 
-    private Long getCountByPhoneNumber(String phoneNumber){
-        return reportRepository.countByPhoneNumber(phoneNumber);
-    }
 }
