@@ -23,6 +23,7 @@ import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
 import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
 import PhishingUniv.Phinocchio.exception.FCM.FCMErrorCode;
+import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import PhishingUniv.Phinocchio.exception.Login.LoginErrorCode;
 import PhishingUniv.Phinocchio.exception.Sos.SosAppException;
@@ -91,8 +92,7 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.level").exists())
         .andExpect(jsonPath("$.level").value(2))
         .andExpect(jsonPath("$.phishing").exists())
-        .andExpect(jsonPath("$.phishing").value(true))
-        .andDo(print());
+        .andExpect(jsonPath("$.phishing").value(true));
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
   }
@@ -118,8 +118,7 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").exists())
         .andExpect(jsonPath("$.error").value("JWT_USER_NOT_FOUND"))
         .andExpect(jsonPath("$.message").exists())
-        .andExpect(jsonPath("$.message").value("로그인 중인 사용자 정보 찾을 수 없습니다."))
-        .andDo(print());
+        .andExpect(jsonPath("$.message").value("로그인 중인 사용자 정보 찾을 수 없습니다."));
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
   }
@@ -146,8 +145,7 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").exists())
         .andExpect(jsonPath("$.error").value("DISCONNCECTED_TO_MLSERVER"))
         .andExpect(jsonPath("$.message").exists())
-        .andExpect(jsonPath("$.message").value("머신러닝 서버와 연결이 되지 않습니다."))
-        .andDo(print());
+        .andExpect(jsonPath("$.message").value("머신러닝 서버와 연결이 되지 않습니다."));
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
   }
@@ -173,8 +171,7 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").exists())
         .andExpect(jsonPath("$.error").value("FAILED_TO_SAVE"))
         .andExpect(jsonPath("$.message").exists())
-        .andExpect(jsonPath("$.message").value("의심내역 저장에 실패하였습니다."))
-        .andDo(print());
+        .andExpect(jsonPath("$.message").value("의심내역 저장에 실패하였습니다."));
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
   }
@@ -200,8 +197,7 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").exists())
         .andExpect(jsonPath("$.error").value("FAILED_TO_SAVE"))
         .andExpect(jsonPath("$.message").exists())
-        .andExpect(jsonPath("$.message").value("목소리 저장에 실패하였습니다."))
-        .andDo(print());
+        .andExpect(jsonPath("$.message").value("목소리 저장에 실패하였습니다."));
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
   }
@@ -227,8 +223,7 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").exists())
         .andExpect(jsonPath("$.error").value("FCM_ERROR"))
         .andExpect(jsonPath("$.message").exists())
-        .andExpect(jsonPath("$.message").value("FCM 관련 오류입니다."))
-        .andDo(print());
+        .andExpect(jsonPath("$.message").value("FCM 관련 오류입니다."));
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
   }
@@ -254,8 +249,7 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.error").exists())
         .andExpect(jsonPath("$.error").value("FAILED_TO_SEND_SMS"))
         .andExpect(jsonPath("$.message").exists())
-        .andExpect(jsonPath("$.message").value("메세지 전송 실패"))
-        .andDo(print());
+        .andExpect(jsonPath("$.message").value("메세지 전송 실패"));
 
     verify(doubtService).doubt(refEq(doubtRequestDto));
   }
@@ -291,8 +285,7 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.[1].phoneNumber").exists())
         .andExpect(jsonPath("$.[1].phoneNumber").value("01043214321"))
         .andExpect(jsonPath("$.[1].title").exists())
-        .andExpect(jsonPath("$.[1].title").value("2023-01-02 통화내역"))
-        .andDo(print());
+        .andExpect(jsonPath("$.[1].title").value("2023-01-02 통화내역"));
 
     verify(doubtService).getDoubtList();
   }
@@ -314,6 +307,30 @@ public class DoubtControllerTest {
     result
         .andExpect(status().isOk())
         .andDo(print());
+
+    verify(doubtService).getDoubtList();
+  }
+
+  @DisplayName("보이스피싱 의심내력 목록 조회 - 실패 (토큰 만료)")
+  @Test
+  void FailToVoicePhishingListSearchWhenJwtExpires () throws Exception {
+    // stub
+    InvalidJwtException invalidJwtException = new InvalidJwtException(LoginErrorCode.JWT_USER_NOT_FOUND);
+
+    // given
+    given(doubtService.getDoubtList()).willThrow(invalidJwtException);
+
+    // when
+    ResultActions result = mockMvc.perform(get("/doubt/get")
+        .contentType(MediaType.APPLICATION_JSON));
+
+    // then
+    result
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.error").exists())
+        .andExpect(jsonPath("$.error").value("JWT_USER_NOT_FOUND"))
+        .andExpect(jsonPath("$.message").exists())
+        .andExpect(jsonPath("$.message").value("로그인 중인 사용자 정보 찾을 수 없습니다."));
 
     verify(doubtService).getDoubtList();
   }

@@ -7,6 +7,8 @@ import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
+import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
+import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -35,7 +37,7 @@ public class DoubtController {
 
 
   @GetMapping("/doubt/get")
-  public ResponseEntity<?> getDoubtList() {
+  public ResponseEntity<?> getDoubtList() throws InvalidJwtException {
     List<DoubtEntity> doubtList = doubtService.getDoubtList();
     return ResponseEntity.ok(doubtList);
   }
