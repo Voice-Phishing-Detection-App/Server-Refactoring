@@ -52,7 +52,8 @@ public class ReportController {
     @GetMapping("/get")
     @Operation(summary = "신고 리스트를 조회하는 컨트롤러", description = "신고 리스트를 조회하는 컨트롤러입니다.")
     public List<ReportEntity> getReports(){
-        return reportService.getReports();
+        List<ReportEntity> reportEntityList = reportService.getReports();
+        return ResponseEntity.ok(reportEntityList).getBody();
 
     }
 
@@ -67,6 +68,8 @@ public class ReportController {
     @PostMapping("/searchList")
     @Operation(summary = "전화번호로 신고 내역을 조회하는 컨트롤러", description = "전화번호로 신고 내역을 조회하는 컨트롤러입니다.")
     public List<ReportEntity> getReportDetail(@RequestBody SearchRequestDto searchRequestDto){
-        return searchService.getReportDetail(searchRequestDto.getPhoneNumber());
+        List<ReportEntity> reportEntityList = searchService.getReportDetail(searchRequestDto.getPhoneNumber());
+
+        return ResponseEntity.ok(reportEntityList).getBody();
     }
 }

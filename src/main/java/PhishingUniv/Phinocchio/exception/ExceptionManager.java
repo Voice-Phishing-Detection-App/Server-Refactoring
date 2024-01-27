@@ -6,6 +6,7 @@ import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
 import PhishingUniv.Phinocchio.exception.GoogleSTT.STTAppException;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
 import PhishingUniv.Phinocchio.exception.Login.LoginAppException;
+import PhishingUniv.Phinocchio.exception.Report.ReportAppException;
 import PhishingUniv.Phinocchio.exception.Setting.SettingAppException;
 import PhishingUniv.Phinocchio.exception.Sos.SosAppException;
 import PhishingUniv.Phinocchio.exception.Twilio.TwilioAppException;
@@ -20,6 +21,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 @Slf4j
 public class ExceptionManager extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(ReportAppException.class)
+    public ResponseEntity<?> reportAppExceptionHandler(ReportAppException e)
+    {
+        ErrorCode errorCode = e.getErrorCode();
+        return handleExceptionInternal(errorCode);
+    }
 
     @ExceptionHandler(DoubtAppException.class)
     public ResponseEntity<?> doubtAppExceptionHandler(DoubtAppException e)

@@ -159,4 +159,23 @@ public class DoubtService {
         .build();
     return doubtResponseDto;
   }
+
+
+  public DoubtEntity findByDoubtId(Long doubtId) throws DoubtAppException{
+    return doubtRepository.findById(doubtId).orElseThrow(() -> new DoubtAppException(
+        DoubtErrorCode.DOUBT_NOT_FOUND));
+  }
+
+  public DoubtEntity save(DoubtEntity doubtEntity) throws DoubtAppException{
+    DoubtEntity saveDoubt = doubtRepository.save(doubtEntity);
+
+    if(saveDoubt == null){
+      throw new DoubtAppException(DoubtErrorCode.FAILED_TO_SAVE);
+    }
+
+    return saveDoubt;
+  }
+
+
+
 }
