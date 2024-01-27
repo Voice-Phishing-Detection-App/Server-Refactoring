@@ -56,10 +56,16 @@ public class ReportService {
         return reportEntity;
     }
 
-    public List<ReportEntity> getReports() throws InvalidJwtException{
+    public List<ReportEntity> getReports() throws InvalidJwtException, ReportAppException{
         UserEntity userEntity = ensureUserAuthenticated();
 
-        return reportRepository.findReportEntitiesByUser(userEntity);
+        List<ReportEntity> reports =  reportRepository.findReportEntitiesByUser(userEntity);
+
+        if (reports.isEmpty()) {
+            throw new ReportAppException(ReportErrorCode.REPORT_NOT_FOUND);
+        }
+
+        return reports;
     }
 
 
