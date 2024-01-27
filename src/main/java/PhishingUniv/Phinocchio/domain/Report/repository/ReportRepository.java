@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReportRepository extends JpaRepository<ReportEntity, Long> {
+
+    ReportEntity save(ReportEntity reportEntity);
+
     Optional<ReportEntity> findByUser(UserEntity user);
     List<ReportEntity> findReportEntitiesByUser(UserEntity user);
 
