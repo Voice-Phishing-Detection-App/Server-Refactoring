@@ -13,6 +13,8 @@ import PhishingUniv.Phinocchio.domain.Voice.entity.VoiceEntity;
 import PhishingUniv.Phinocchio.domain.Voice.service.VoiceService;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
 import PhishingUniv.Phinocchio.exception.Login.InvalidJwtException;
+import PhishingUniv.Phinocchio.exception.Report.ReportAppException;
+import PhishingUniv.Phinocchio.exception.Report.ReportErrorCode;
 import PhishingUniv.Phinocchio.exception.Voice.VoiceAppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,12 +29,16 @@ public class ReportService {
     private final VoiceService voiceService;
     private final UserService userService;
 
-    public ReportEntity addReport(ReportDto reportDto) throws InvalidJwtException, DoubtAppException, VoiceAppException {
+    public ReportEntity addReport(ReportDto reportDto) throws InvalidJwtException, DoubtAppException, VoiceAppException, ReportAppException {
         UserEntity userEntity = ensureUserAuthenticated();
         VoiceEntity voiceEntity = voiceService.findByVoiceId(reportDto.getVoiceId());
         ReportEntity reportEntity = createReportEntity(reportDto, userEntity, voiceEntity);
 
-        reportRepository.save(reportEntity);
+        ReportEntity savedReport = reportRepository.save(reportEntity);
+        if(savedReport == null){
+            throw new ReportAppException(ReportErrorCode.FAILED_TO_SAVE);
+        }
+
         updateDoubtEntity(reportDto, reportEntity);
 
         return reportEntity;
@@ -42,13 +48,18 @@ public class ReportService {
         UserEntity userEntity = ensureUserAuthenticated();
         ReportEntity reportEntity = createReportWithoutDoubtEntity(reportDto, userEntity);
 
-        return reportRepository.save(reportEntity);
+        ReportEntity savedReport = reportRepository.save(reportEntity);
+        if(savedReport == null){
+            throw new ReportAppException(ReportErrorCode.FAILED_TO_SAVE);
+        }
+
+        return reportEntity;
     }
 
     public List<ReportEntity> getReports() throws InvalidJwtException{
         UserEntity userEntity = ensureUserAuthenticated();
 
-      return reportRepository.findReportEntitiesByUser(userEntity);
+        return reportRepository.findReportEntitiesByUser(userEntity);
     }
 
 
