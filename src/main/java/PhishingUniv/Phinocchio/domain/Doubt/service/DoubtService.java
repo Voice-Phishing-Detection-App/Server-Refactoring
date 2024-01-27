@@ -120,12 +120,13 @@ public class DoubtService {
 
   private void saveDoubt(AnalyzedVoicePhishingDto analyzedVoicePhishingDto, VoiceEntity voice)
       throws DoubtAppException, InvalidJwtException {
-    DoubtEntity doubtEntity = new DoubtEntity();
-    doubtEntity.setPhoneNumber(analyzedVoicePhishingDto.getPhoneNumber());
-    doubtEntity.setLevel(analyzedVoicePhishingDto.getLevel());
-    doubtEntity.setVoice(voice);
-    doubtEntity.setTitle(generateTitleWithCurrentTime());
-    doubtEntity.setUser(userService.getCurrentUser());
+    DoubtEntity doubtEntity = DoubtEntity.builder()
+            .phoneNumber(analyzedVoicePhishingDto.getPhoneNumber())
+            .level(analyzedVoicePhishingDto.getLevel())
+            .voice(voice)
+            .title(generateTitleWithCurrentTime())
+            .user(userService.getCurrentUser())
+            .build();
 
     DoubtEntity savedDoubtEntity = doubtRepository.save(doubtEntity);
     if (savedDoubtEntity == null) {

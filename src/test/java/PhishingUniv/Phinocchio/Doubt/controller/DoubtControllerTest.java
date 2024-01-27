@@ -14,7 +14,11 @@ import PhishingUniv.Phinocchio.domain.Doubt.controller.DoubtController;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
+import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
+import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
+import PhishingUniv.Phinocchio.domain.User.entity.UserEntity;
+import PhishingUniv.Phinocchio.domain.Voice.entity.VoiceEntity;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtAppException;
 import PhishingUniv.Phinocchio.exception.Doubt.DoubtErrorCode;
 import PhishingUniv.Phinocchio.exception.FCM.FCMAppException;
@@ -26,6 +30,9 @@ import PhishingUniv.Phinocchio.exception.Sos.SosErrorCode;
 import PhishingUniv.Phinocchio.exception.Voice.VoiceAppException;
 import PhishingUniv.Phinocchio.exception.Voice.VoiceErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -253,6 +260,64 @@ public class DoubtControllerTest {
     verify(doubtService).doubt(refEq(doubtRequestDto));
   }
 
+  @DisplayName("보이스피싱 의심내역 목록 조회 - 성공 (의심내역이 있는 경우)")
+  @Test
+  void SuccessToVoicePhishingListSearchInDoubt () throws Exception {
+    // stub
+    List<DoubtEntity> doubtList = doubtList();
+
+    // given
+    given(doubtService.getDoubtList()).willReturn(doubtList);
+
+    // when
+    ResultActions result = mockMvc.perform(get("/doubt/get")
+        .contentType(MediaType.APPLICATION_JSON));
+
+    // then
+    result
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.[0].doubtId").exists())
+        .andExpect(jsonPath("$.[0].doubtId").value(1))
+        .andExpect(jsonPath("$.[0].level").exists())
+        .andExpect(jsonPath("$.[0].level").value(2))
+        .andExpect(jsonPath("$.[0].phoneNumber").exists())
+        .andExpect(jsonPath("$.[0].phoneNumber").value("01012341234"))
+        .andExpect(jsonPath("$.[0].title").exists())
+        .andExpect(jsonPath("$.[0].title").value("2023-01-01 통화내역"))
+        .andExpect(jsonPath("$.[1].doubtId").exists())
+        .andExpect(jsonPath("$.[1].doubtId").value(2))
+        .andExpect(jsonPath("$.[1].level").exists())
+        .andExpect(jsonPath("$.[1].level").value(3))
+        .andExpect(jsonPath("$.[1].phoneNumber").exists())
+        .andExpect(jsonPath("$.[1].phoneNumber").value("01043214321"))
+        .andExpect(jsonPath("$.[1].title").exists())
+        .andExpect(jsonPath("$.[1].title").value("2023-01-02 통화내역"))
+        .andDo(print());
+
+    verify(doubtService).getDoubtList();
+  }
+
+  @DisplayName("보이스피싱 의심내역 목록 조회 - 성공 (의심내역이 없는 경우)")
+  @Test
+  void SuccessToEmptyVoicePhishingListSearchInDoubt () throws Exception {
+    // stub
+    List<DoubtEntity> doubtList = doubtList();
+
+    // given
+    given(doubtService.getDoubtList()).willReturn(doubtList);
+
+    // when
+    ResultActions result = mockMvc.perform(get("/doubt/get")
+        .contentType(MediaType.APPLICATION_JSON));
+
+    // then
+    result
+        .andExpect(status().isOk())
+        .andDo(print());
+
+    verify(doubtService).getDoubtList();
+  }
+
   private DoubtRequestDto doubtRequestDto() {
     DoubtRequestDto doubtRequestDto = new DoubtRequestDto();
     doubtRequestDto.setPhoneNumber("01012341234");
@@ -265,6 +330,44 @@ public class DoubtControllerTest {
     doubtResponseDto.setLevel(2);
     doubtResponseDto.setPhishing(true);
     return doubtResponseDto;
+  }
+
+  private List<DoubtEntity> doubtList() {
+    UserEntity userEntity = UserEntity.builder().build();
+    ReportEntity reportEntity = ReportEntity.builder().build();
+    VoiceEntity voiceEntity = VoiceEntity.builder().build();
+
+    DoubtEntity doubtEntity1 = DoubtEntity.builder()
+            .doubtId(1L)
+            .level(2)
+            .phoneNumber("01012341234")
+            .title("2023-01-01 통화내역")
+            .user(userEntity)
+            .report(reportEntity)
+            .voice(voiceEntity)
+            .build();
+
+    DoubtEntity doubtEntity2 = DoubtEntity.builder()
+        .doubtId(2L)
+        .level(3)
+        .phoneNumber("01043214321")
+        .title("2023-01-02 통화내역")
+        .user(userEntity)
+        .report(reportEntity)
+        .voice(voiceEntity)
+        .build();
+
+    List<DoubtEntity> doubtList = new ArrayList<>();
+    doubtList.add(doubtEntity1);
+    doubtList.add(doubtEntity2);
+
+    return doubtList;
+  }
+
+  private List<DoubtEntity> emptydoubtList() {
+    List<DoubtEntity> doubtList = new ArrayList<>();
+
+    return doubtList;
   }
 
 }

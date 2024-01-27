@@ -14,8 +14,7 @@ public class VoiceService {
   private final VoiceRepository voiceRepository;
 
   public VoiceEntity saveVoice(String text) throws VoiceAppException {
-    VoiceEntity voice = new VoiceEntity();
-    voice.setText(text);
+    VoiceEntity voice = VoiceEntity.builder().text(text).build();
 
     VoiceEntity savedVoice = voiceRepository.save(voice);
     if (savedVoice == null) {

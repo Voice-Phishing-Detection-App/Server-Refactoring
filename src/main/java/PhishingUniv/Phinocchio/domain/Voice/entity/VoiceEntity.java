@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +16,7 @@ import lombok.Setter;
 @Table(name = "voice")
 @Getter
 @Setter
+@Builder
 public class VoiceEntity {
 
   @Id
@@ -24,4 +27,13 @@ public class VoiceEntity {
   @Lob
   @Column(name = "text", nullable = false)
   private String text;
+
+  public VoiceEntity(Long voiceId, String text) {
+    this.voiceId = voiceId;
+    this.text = text;
+  }
+
+  public VoiceEntity(String text) {
+    this.text = text;
+  }
 }

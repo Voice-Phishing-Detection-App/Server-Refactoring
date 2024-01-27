@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Table(name = "doubt")
 @Getter
 @Setter
+@Builder
 public class DoubtEntity extends Timestamp implements Serializable {
 
   @Id
@@ -49,4 +51,27 @@ public class DoubtEntity extends Timestamp implements Serializable {
   @OneToOne
   @JoinColumn(name = "report_id")
   private ReportEntity report;
+
+  public DoubtEntity(String phoneNumber, int level, UserEntity user, String title,
+      VoiceEntity voice,
+      ReportEntity report) {
+    this.phoneNumber = phoneNumber;
+    this.level = level;
+    this.user = user;
+    this.title = title;
+    this.voice = voice;
+    this.report = report;
+  }
+
+  public DoubtEntity(Long doubtId, String phoneNumber, int level, UserEntity user, String title,
+      VoiceEntity voice,
+      ReportEntity report) {
+    this.doubtId = doubtId;
+    this.phoneNumber = phoneNumber;
+    this.level = level;
+    this.user = user;
+    this.title = title;
+    this.voice = voice;
+    this.report = report;
+  }
 }
