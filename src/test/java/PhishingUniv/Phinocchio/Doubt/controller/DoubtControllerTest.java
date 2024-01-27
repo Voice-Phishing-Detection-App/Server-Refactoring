@@ -14,6 +14,8 @@ import PhishingUniv.Phinocchio.domain.Doubt.controller.DoubtController;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtRequestDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.DoubtResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.dto.MLResponseDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerRequestDto;
+import PhishingUniv.Phinocchio.domain.Doubt.dto.MLServerResponseDto;
 import PhishingUniv.Phinocchio.domain.Doubt.entity.DoubtEntity;
 import PhishingUniv.Phinocchio.domain.Doubt.service.DoubtService;
 import PhishingUniv.Phinocchio.domain.Report.entity.ReportEntity;
@@ -311,7 +313,7 @@ public class DoubtControllerTest {
     verify(doubtService).getDoubtList();
   }
 
-  @DisplayName("보이스피싱 의심내력 목록 조회 - 실패 (토큰 만료)")
+  @DisplayName("보이스피싱 의심내력 목록 조ㄴㄷㅅ샤 - 실패 (토큰 만료)")
   @Test
   void FailToVoicePhishingListSearchWhenJwtExpires () throws Exception {
     // stub
@@ -333,6 +335,34 @@ public class DoubtControllerTest {
         .andExpect(jsonPath("$.message").value("로그인 중인 사용자 정보 찾을 수 없습니다."));
 
     verify(doubtService).getDoubtList();
+  }
+
+  @DisplayName("보이스피싱 의심 분석하는 머신러닝 서버 주소 설정 - 성공")
+  @Test
+  void SuccessToSettingMLServer () throws Exception {
+    // stub
+    MLServerRequestDto mlServerRequestDto = new MLServerRequestDto();
+    mlServerRequestDto.setUrl(mlserver());
+
+    MLServerResponseDto mlServerResponseDto = new MLServerResponseDto();
+    mlServerResponseDto.setMlServer(mlserver());
+
+    // given
+    given(doubtService.setMLServerUrl(any(MLServerRequestDto.class))).willReturn(mlServerResponseDto);
+
+    // when
+    ResultActions result = mockMvc.perform(post("/doubt/set-ml-server")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(mlServerRequestDto)));
+
+    // then
+    result
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.mlServer").exists())
+        .andExpect(jsonPath("$.mlServer").value(mlserver()))
+        .andDo(print());
+
+    verify(doubtService).setMLServerUrl(refEq(mlServerRequestDto));
   }
 
   private DoubtRequestDto doubtRequestDto() {
@@ -385,6 +415,10 @@ public class DoubtControllerTest {
     List<DoubtEntity> doubtList = new ArrayList<>();
 
     return doubtList;
+  }
+
+  private String mlserver() {
+    return "https://ml-server.com";
   }
 
 }
